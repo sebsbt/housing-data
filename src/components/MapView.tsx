@@ -572,7 +572,7 @@ export function MapView({
 
       map.on("mouseout", clearHover);
 
-      map.on("click", "regions-fill", (e) => {
+      const openFeaturePopup = (e: maplibregl.MapLayerMouseEvent) => {
         const f = e.features?.[0];
         if (!f?.properties) return;
         const p = f.properties as Record<string, unknown>;
@@ -629,7 +629,11 @@ export function MapView({
           .setLngLat(e.lngLat)
           .setHTML(html)
           .addTo(map);
-      });
+      };
+
+      map.on("click", "regions-fill", openFeaturePopup);
+      if (map.getLayer("regions-outline")) map.on("click", "regions-outline", openFeaturePopup);
+      if (map.getLayer("regions-outline-casing")) map.on("click", "regions-outline-casing", openFeaturePopup);
 
       syncMarketsLayersRef.current?.();
     });

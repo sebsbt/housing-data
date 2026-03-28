@@ -51,11 +51,12 @@ export function metricColorExpression(
   const q2 = lo + span * 0.5;
   const q3 = lo + span * 0.75;
 
-  const lowColor = fav === "low" ? "#16a34a" : "#dc2626"; // green if low favorable else red
-  const midLow = fav === "low" ? "#86efac" : "#fca5a5";
-  const mid = "#e5e7eb";
-  const midHigh = fav === "low" ? "#fca5a5" : "#86efac";
-  const highColor = fav === "low" ? "#dc2626" : "#16a34a";
+  // high-contrast red/green diverging palette for stronger visual separation
+  const lowColor = fav === "low" ? "#00a63e" : "#c40000"; // favorable end
+  const midLow = fav === "low" ? "#7fff7f" : "#ff8a8a";
+  const mid = "#f3f4f6";
+  const midHigh = fav === "low" ? "#ff8a8a" : "#7fff7f";
+  const highColor = fav === "low" ? "#c40000" : "#00a63e";
 
   return [
     "interpolate",

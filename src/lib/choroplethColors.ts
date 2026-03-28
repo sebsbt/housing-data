@@ -14,10 +14,10 @@ function favorableDirection(metricId: string, perspective: "buyer" | "seller"): 
 
 export function legendGradientCss(metricId: string, perspective: "buyer" | "seller" = "buyer"): string {
   const fav = favorableDirection(metricId, perspective);
-  const low = fav === "low" ? "#16a34a" : "#dc2626";
-  const midLow = fav === "low" ? "#86efac" : "#fca5a5";
-  const mid = "#e5e7eb";
-  const midHigh = fav === "low" ? "#fca5a5" : "#86efac";
-  const high = fav === "low" ? "#dc2626" : "#16a34a";
+  const low = fav === "low" ? "#00a63e" : "#c40000";
+  const midLow = fav === "low" ? "#7fff7f" : "#ff8a8a";
+  const mid = "#f3f4f6";
+  const midHigh = fav === "low" ? "#ff8a8a" : "#7fff7f";
+  const high = fav === "low" ? "#c40000" : "#00a63e";
   return `linear-gradient(90deg, ${low} 0%, ${midLow} 25%, ${mid} 50%, ${midHigh} 75%, ${high} 100%)`;
 }
