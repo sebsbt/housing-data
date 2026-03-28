@@ -304,14 +304,14 @@ export function MapView({
             "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
-              0.82,
+              0.88,
               [
                 "any",
                 ["==", ["get", "has_metric"], false],
                 ["==", ["get", "has_metric"], 0],
               ],
-              0.38,
-              0.62,
+              0.46,
+              0.74,
             ],
           },
         });
@@ -418,10 +418,10 @@ export function MapView({
             "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
-              0.82,
+              0.88,
               ["==", ["get", "has_metric"], false],
-              0.38,
-              0.62,
+              0.46,
+              0.74,
             ],
           },
         });
