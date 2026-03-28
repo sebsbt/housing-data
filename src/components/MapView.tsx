@@ -16,6 +16,9 @@ const ZCTA_SOURCE_LAYER = "zcta";
 const MIN_ZCTA_ZOOM = 7.75;
 const ZCTA_DEBOUNCE_MS = 280;
 
+// Keep ZIP outlines clearly visible on dark basemap while avoiding heavy overdraw at low zoom.
+const ZIP_OUTLINE_MIN_ZOOM = 7.5;
+
 let pmtilesProtocolRegistered = false;
 function ensurePmtilesProtocol() {
   if (pmtilesProtocolRegistered) return;
@@ -308,18 +311,34 @@ export function MapView({
           type: "line",
           source: "markets",
           "source-layer": ZCTA_SOURCE_LAYER,
+          minzoom: ZIP_OUTLINE_MIN_ZOOM,
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
           paint: {
             "line-color": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
               HOVER_LINE,
-              "rgba(255,255,255,0.28)",
+              "rgba(255,255,255,0.72)",
+            ],
+            "line-opacity": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              ZIP_OUTLINE_MIN_ZOOM,
+              0.55,
+              9,
+              0.8,
+              12,
+              0.95,
             ],
             "line-width": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
-              2.4,
-              0.9,
+              2.6,
+              ["interpolate", ["linear"], ["zoom"], ZIP_OUTLINE_MIN_ZOOM, 0.8, 9, 1.1, 12, 1.6],
             ],
           },
         });
@@ -384,18 +403,34 @@ export function MapView({
           id: "regions-outline",
           type: "line",
           source: "markets",
+          minzoom: geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0,
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
           paint: {
             "line-color": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
               HOVER_LINE,
-              "rgba(255,255,255,0.28)",
+              "rgba(255,255,255,0.72)",
+            ],
+            "line-opacity": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0,
+              geography === "zip" ? 0.55 : 0.7,
+              9,
+              0.85,
+              12,
+              0.95,
             ],
             "line-width": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
-              2.4,
-              0.9,
+              2.6,
+              ["interpolate", ["linear"], ["zoom"], geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0, 0.8, 9, 1.1, 12, 1.6],
             ],
           },
         });
