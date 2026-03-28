@@ -149,6 +149,7 @@ export default function App() {
   const [rangeMin, setRangeMin] = useState<number | null>(null);
   const [rangeMax, setRangeMax] = useState<number | null>(null);
   const [showHelperText, setShowHelperText] = useState(true);
+  const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -449,6 +450,7 @@ export default function App() {
                 metricDomain={metricDomain}
                 salesYear={geography === "zip" ? selectedYear : undefined}
                 perspective={perspective}
+                selectedRegionId={selectedRegionId}
                 zipUsePmtiles={geography === "zip" && appConfig?.zipPmtiles === true}
                 onZipViewportLoad={
                   geography === "zip" && appConfig?.zipPmtiles !== true
@@ -477,6 +479,7 @@ export default function App() {
               geography={geography}
               data={filteredFc}
               metricId={selectedMetric}
+              onSelectRow={(id) => setSelectedRegionId(String(id))}
               onClose={() => setTableOpen(false)}
             />
           )}
@@ -490,11 +493,13 @@ function TableDrawer({
   geography,
   data,
   metricId,
+  onSelectRow,
   onClose,
 }: {
   geography: GeographyMode;
   data: FeatureCollection;
   metricId: string;
+  onSelectRow: (id: string) => void;
   onClose: () => void;
 }) {
   const rows: (Record<string, unknown> & { key: string })[] = data.features.map(
@@ -508,6 +513,7 @@ function TableDrawer({
 
   const [sortKey, setSortKey] = useState<string>(isMetro ? "metro_name" : "zip");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [activeRowKey, setActiveRowKey] = useState<string | null>(null);
 
   const onSort = (key: string) => {
     if (sortKey === key) {
@@ -577,7 +583,15 @@ function TableDrawer({
           </thead>
           <tbody>
             {sortedRows.map((r) => (
-              <tr key={r.key}>
+              <tr
+                key={r.key}
+                className={activeRowKey === r.key ? "active-row" : ""}
+                onClick={() => {
+                  setActiveRowKey(r.key);
+                  onSelectRow(String(isMetro ? (r.cbsa ?? r.key) : (r.zip ?? r.key)));
+                }}
+                style={{ cursor: "pointer" }}
+              >
                 {isMetro ? (
                   <>
                     <td>{String(r.cbsa ?? "—")}</td>

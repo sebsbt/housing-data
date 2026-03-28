@@ -89,6 +89,7 @@ type Props = {
   metricDomain: { min: number; max: number };
   salesYear?: number;
   perspective?: PerspectiveMode;
+  selectedRegionId?: string | null;
   /** When true, load `zcta.pmtiles` instead of `/api/zcta-viewport` GeoJSON. */
   zipUsePmtiles?: boolean;
   onZipViewportLoad?: (fc: FeatureCollection, hint: string | null) => void;
@@ -103,6 +104,7 @@ export function MapView({
   metricDomain,
   salesYear,
   perspective = "buyer",
+  selectedRegionId = null,
   zipUsePmtiles = false,
   onZipViewportLoad,
 }: Props) {
@@ -115,6 +117,7 @@ export function MapView({
   const zipTilesRef = useRef(zipUsePmtiles);
   const reloadZipViewportRef = useRef<(() => void) | null>(null);
   const hoveredIdRef = useRef<string | number | null>(null);
+  const selectedIdRef = useRef<string | number | null>(null);
   const geographyRef = useRef(geography);
   const syncMarketsLayersRef = useRef<(() => void) | null>(null);
   const onZipLoadRef = useRef(onZipViewportLoad);
@@ -303,6 +306,8 @@ export function MapView({
             "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective),
             "fill-opacity": [
               "case",
+              ["boolean", ["feature-state", "selected"], false],
+              0.96,
               ["boolean", ["feature-state", "hover"], false],
               0.88,
               [
@@ -346,6 +351,8 @@ export function MapView({
           paint: {
             "line-color": [
               "case",
+              ["boolean", ["feature-state", "selected"], false],
+              "#f59e0b",
               ["boolean", ["feature-state", "hover"], false],
               HOVER_LINE,
               "rgba(255,255,255,0.95)",
@@ -363,6 +370,8 @@ export function MapView({
             ],
             "line-width": [
               "case",
+              ["boolean", ["feature-state", "selected"], false],
+              3.6,
               ["boolean", ["feature-state", "hover"], false],
               2.8,
               ["interpolate", ["linear"], ["zoom"], ZIP_OUTLINE_MIN_ZOOM, 1.1, 9, 1.4, 12, 1.9],
@@ -417,6 +426,8 @@ export function MapView({
             "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective),
             "fill-opacity": [
               "case",
+              ["boolean", ["feature-state", "selected"], false],
+              0.96,
               ["boolean", ["feature-state", "hover"], false],
               0.88,
               ["==", ["get", "has_metric"], false],
@@ -464,6 +475,8 @@ export function MapView({
           paint: {
             "line-color": [
               "case",
+              ["boolean", ["feature-state", "selected"], false],
+              "#f59e0b",
               ["boolean", ["feature-state", "hover"], false],
               HOVER_LINE,
               geography === "zip" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.75)",
@@ -481,6 +494,8 @@ export function MapView({
             ],
             "line-width": [
               "case",
+              ["boolean", ["feature-state", "selected"], false],
+              3.6,
               ["boolean", ["feature-state", "hover"], false],
               2.8,
               ["interpolate", ["linear"], ["zoom"], geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0, 1.1, 9, 1.4, 12, 1.9],
@@ -667,6 +682,31 @@ export function MapView({
   useEffect(() => {
     syncMarketsLayersRef.current?.();
   }, [data, metricId, metric, min, max, geography, salesYear, perspective, zipUsePmtiles]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map?.isStyleLoaded()) return;
+
+    const prev = selectedIdRef.current;
+    if (prev != null) {
+      try {
+        map.setFeatureState({ source: "markets", id: prev }, { selected: false });
+      } catch {
+        /* ignore */
+      }
+      selectedIdRef.current = null;
+    }
+
+    if (!selectedRegionId) return;
+
+    const nextId: string | number = String(selectedRegionId);
+    try {
+      map.setFeatureState({ source: "markets", id: nextId }, { selected: true });
+      selectedIdRef.current = nextId;
+    } catch {
+      /* ignore */
+    }
+  }, [selectedRegionId, geography, data, zipUsePmtiles]);
 
   return <div ref={containerRef} className="map-canvas" />;
 }
