@@ -10,6 +10,7 @@ type Props = {
   onToggleTable: () => void;
   colorblindMode: boolean;
   onToggleColorblindMode: () => void;
+  onOpenMobileControls: () => void;
 };
 
 const LEVELS: { id: Geo; label: string; mode?: GeographyMode }[] = [
@@ -27,6 +28,7 @@ export function TopBar({
   onToggleTable,
   colorblindMode,
   onToggleColorblindMode,
+  onOpenMobileControls,
 }: Props) {
   return (
     <header className="topbar">
@@ -63,6 +65,9 @@ export function TopBar({
       </nav>
 
       <div className="topbar-actions">
+        <button type="button" className="btn-outline mobile-only" onClick={onOpenMobileControls}>
+          Controls
+        </button>
         <button type="button" className="btn-outline" onClick={onToggleColorblindMode}>
           Settings: {colorblindMode ? "Colorblind" : "Default"}
         </button>

@@ -76,6 +76,10 @@
   flex-shrink: 0;
 }
 
+.mobile-only {
+  display: none;
+}
+
 .btn-outline {
   border: 1px solid var(--border);
   background: transparent;
@@ -110,5 +114,9 @@
     order: 3;
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .mobile-only {
+    display: inline-flex;
   }
 }

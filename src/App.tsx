@@ -152,6 +152,7 @@ export default function App() {
   const [showHelperText, setShowHelperText] = useState(true);
   const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
   const [paletteMode, setPaletteMode] = useState<PaletteMode>("default");
+  const [mobileControlsOpen, setMobileControlsOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -387,6 +388,7 @@ export default function App() {
         onToggleColorblindMode={() =>
           setPaletteMode((m) => (m === "colorblind" ? "default" : "colorblind"))
         }
+        onOpenMobileControls={() => setMobileControlsOpen(true)}
       />
       <SalesTimelineBar
         visible={
@@ -419,6 +421,8 @@ export default function App() {
           onRangeMaxChange={setRangeMax}
           showHelperText={showHelperText}
           onShowHelperText={setShowHelperText}
+          mobileOpen={mobileControlsOpen}
+          onCloseMobile={() => setMobileControlsOpen(false)}
           metricDef={selectedMetricDef}
         />
         <main className="map-main">

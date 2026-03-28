@@ -325,8 +325,28 @@
   border: 2px solid #111827;
 }
 
+.sidebar-mobile-head {
+  display: none;
+  padding: 10px 14px 0;
+}
+
 @media (max-width: 900px) {
   .sidebar {
-    display: none;
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(88vw, 360px);
+    z-index: 20;
+    transform: translateX(-105%);
+    transition: transform 180ms ease;
+    border-right: 1px solid var(--border);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-mobile-head {
+    display: block;
   }
 }

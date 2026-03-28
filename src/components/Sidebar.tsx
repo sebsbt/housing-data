@@ -24,6 +24,8 @@ type Props = {
   onRangeMaxChange: (v: number) => void;
   showHelperText: boolean;
   onShowHelperText: (v: boolean) => void;
+  mobileOpen: boolean;
+  onCloseMobile: () => void;
   metricDef: MetricDef | undefined;
 };
 
@@ -41,12 +43,19 @@ export function Sidebar({
   onRangeMaxChange,
   showHelperText,
   onShowHelperText,
+  mobileOpen,
+  onCloseMobile,
   metricDef,
 }: Props) {
   const groups = [...new Set(metrics.map((m) => m.group))];
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}>
+      <div className="sidebar-mobile-head">
+        <button type="button" className="btn-outline" onClick={onCloseMobile}>
+          Close
+        </button>
+      </div>
       <section className="sidebar-section">
         <h2 className="sidebar-heading">Popular data</h2>
         <div className="filter-grid" style={{ marginBottom: 8 }}>
