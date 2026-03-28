@@ -1,0 +1,55 @@
+.sales-timeline-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+
+.sales-timeline-bar--hidden {
+  display: none;
+}
+
+.sales-timeline-label {
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.sales-timeline-play {
+  font: inherit;
+  padding: 4px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.sales-timeline-play:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sales-timeline-play[aria-pressed="true"] {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sales-timeline-slider {
+  flex: 1;
+  min-width: 120px;
+  max-width: 320px;
+  accent-color: var(--accent);
+}
+
+.sales-timeline-year {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  min-width: 2.5rem;
+  color: var(--accent);
+}

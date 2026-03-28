@@ -1,0 +1,59 @@
+[
+  {
+    "id": "zhvi",
+    "label": "Typical value (USD)",
+    "group": "Home Price & Affordability",
+    "source": "zillow",
+    "unit": "usd",
+    "metricFamily": "home_value",
+    "familyLabel": "Home value",
+    "familyOrder": 0,
+    "description": "Typical home value (ZHVI-style index from Zillow Research CSVs you ingest). Source: Zillow Research Data."
+  },
+  {
+    "id": "zhvi_yoy",
+    "label": "Change vs year ago (YoY %)",
+    "group": "Home Price & Affordability",
+    "source": "zillow",
+    "unit": "percent",
+    "metricFamily": "home_value",
+    "familyLabel": "Home value",
+    "familyOrder": 1,
+    "description": "Year-over-year percent change in typical home value from your Zillow Research export (latest month vs same month prior year)."
+  },
+  {
+    "id": "zhvi_mom",
+    "label": "Change vs prior month (MoM %)",
+    "group": "Home Price & Affordability",
+    "source": "zillow",
+    "unit": "percent",
+    "metricFamily": "home_value",
+    "familyLabel": "Home value",
+    "familyOrder": 2,
+    "description": "Month-over-month percent change when your ingest includes consecutive month columns (see ingest script)."
+  },
+  {
+    "id": "home_sales",
+    "label": "Home Sales",
+    "group": "Market Trends",
+    "source": "redfin",
+    "unit": "count",
+    "description": "Homes sold (exact definition follows the Redfin Data Center file you ingest)."
+  },
+  {
+    "id": "home_sales_yoy",
+    "label": "Home Sales Growth (YoY)",
+    "group": "Market Trends",
+    "source": "redfin",
+    "unit": "percent",
+    "description": "Year-over-year change in home sales from your Redfin Data Center export."
+  },
+  {
+    "id": "days_on_market",
+    "label": "Days on Market",
+    "group": "Market Trends",
+    "source": "redfin",
+    "unit": "days",
+    "description": "Median days on market when present in your Redfin ingest."
+  }
+]

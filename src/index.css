@@ -1,0 +1,68 @@
+:root {
+  --bg: #0b0f14;
+  --panel: #12181f;
+  --panel-2: #1a222c;
+  --border: #2a3544;
+  --text: #e8edf4;
+  --muted: #8b9bb0;
+  --accent: #3dd6b4;
+  --accent-dim: rgba(61, 214, 180, 0.15);
+  --danger: #f87171;
+  --font: system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px !important;
+  background: rgba(18, 24, 31, 0.85) !important;
+  color: var(--muted) !important;
+}
+
+.maplibregl-popup-content {
+  background: var(--panel) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.maplibregl-popup-close-button {
+  color: var(--muted) !important;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

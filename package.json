@@ -1,0 +1,37 @@
+{
+  "name": "housing-market-map",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev:api": "cross-env PORT=3001 node server/index.mjs",
+    "dev": "concurrently -k \"npm run dev:api\" \"wait-on tcp:127.0.0.1:3001 && vite\"",
+    "build": "vite build",
+    "start": "cross-env NODE_ENV=production node server/index.mjs",
+    "ingest:zhvi": "node scripts/ingest-zhvi-zip.mjs",
+    "ingest:redfin": "node scripts/ingest-redfin-metro.mjs",
+    "build:regions": "node scripts/build-demo-regions.mjs",
+    "prepare:tiles-input": "node scripts/prepare-zcta-tiles-input.mjs",
+    "build:pmtiles": "node scripts/prepare-zcta-tiles-input.mjs && node scripts/build-zcta-pmtiles.mjs"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.3.1",
+    "maplibre-gl": "^5.1.0",
+    "pmtiles": "^4.4.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.7",
+    "vitest": "^4.1.2",
+    "wait-on": "^9.0.4"
+  }
+}

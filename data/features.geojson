@@ -1,0 +1,326 @@
+{
+  "type": "FeatureCollection",
+  "name": "demo_zip_points",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-74.006, 40.7128] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "10001",
+        "state": "NY",
+        "city": "New York",
+        "zhvi": 685000,
+        "zhvi_yoy": 4.2,
+        "home_sales": 42,
+        "home_sales_yoy": -6.1,
+        "days_on_market": 38,
+        "data_note": "DEMO_PLACEHOLDER — replace via ingest from Zillow/Redfin public data files"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-118.4065, 34.0901] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "90210",
+        "state": "CA",
+        "city": "Beverly Hills",
+        "zhvi": 3850000,
+        "zhvi_yoy": 2.8,
+        "home_sales": 11,
+        "home_sales_yoy": 4.5,
+        "days_on_market": 52,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.4194, 37.7749] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "94102",
+        "state": "CA",
+        "city": "San Francisco",
+        "zhvi": 1120000,
+        "zhvi_yoy": -1.4,
+        "home_sales": 28,
+        "home_sales_yoy": -9.2,
+        "days_on_market": 31,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-87.6298, 41.8781] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "60614",
+        "state": "IL",
+        "city": "Chicago",
+        "zhvi": 525000,
+        "zhvi_yoy": 3.1,
+        "home_sales": 55,
+        "home_sales_yoy": 1.2,
+        "days_on_market": 29,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.3321, 47.6062] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "98101",
+        "state": "WA",
+        "city": "Seattle",
+        "zhvi": 798000,
+        "zhvi_yoy": 5.4,
+        "home_sales": 33,
+        "home_sales_yoy": -3.8,
+        "days_on_market": 24,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-104.9903, 39.7392] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "80202",
+        "state": "CO",
+        "city": "Denver",
+        "zhvi": 612000,
+        "zhvi_yoy": 6.0,
+        "home_sales": 40,
+        "home_sales_yoy": 0.4,
+        "days_on_market": 22,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-95.3698, 29.7604] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "77002",
+        "state": "TX",
+        "city": "Houston",
+        "zhvi": 318000,
+        "zhvi_yoy": 2.2,
+        "home_sales": 62,
+        "home_sales_yoy": 2.9,
+        "days_on_market": 35,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-112.074, 33.4484] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "85004",
+        "state": "AZ",
+        "city": "Phoenix",
+        "zhvi": 385000,
+        "zhvi_yoy": 4.8,
+        "home_sales": 71,
+        "home_sales_yoy": -4.0,
+        "days_on_market": 41,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-80.1918, 25.7617] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "33139",
+        "state": "FL",
+        "city": "Miami Beach",
+        "zhvi": 742000,
+        "zhvi_yoy": 7.1,
+        "home_sales": 36,
+        "home_sales_yoy": 5.5,
+        "days_on_market": 48,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-71.0589, 42.3601] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "02108",
+        "state": "MA",
+        "city": "Boston",
+        "zhvi": 925000,
+        "zhvi_yoy": 3.6,
+        "home_sales": 19,
+        "home_sales_yoy": -2.1,
+        "days_on_market": 27,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-77.0369, 38.9072] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "20001",
+        "state": "DC",
+        "city": "Washington",
+        "zhvi": 698000,
+        "zhvi_yoy": 2.9,
+        "home_sales": 24,
+        "home_sales_yoy": -1.0,
+        "days_on_market": 33,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-84.388, 33.749] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "30309",
+        "state": "GA",
+        "city": "Atlanta",
+        "zhvi": 455000,
+        "zhvi_yoy": 4.4,
+        "home_sales": 44,
+        "home_sales_yoy": 3.3,
+        "days_on_market": 26,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-96.797, 32.7767] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "75201",
+        "state": "TX",
+        "city": "Dallas",
+        "zhvi": 398000,
+        "zhvi_yoy": 1.9,
+        "home_sales": 51,
+        "home_sales_yoy": -2.4,
+        "days_on_market": 39,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-97.7431, 30.2672] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "78701",
+        "state": "TX",
+        "city": "Austin",
+        "zhvi": 578000,
+        "zhvi_yoy": -0.8,
+        "home_sales": 47,
+        "home_sales_yoy": -5.6,
+        "days_on_market": 44,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-122.6784, 45.5152] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "97205",
+        "state": "OR",
+        "city": "Portland",
+        "zhvi": 512000,
+        "zhvi_yoy": 1.2,
+        "home_sales": 30,
+        "home_sales_yoy": -7.4,
+        "days_on_market": 36,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-115.1398, 36.1699] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "89101",
+        "state": "NV",
+        "city": "Las Vegas",
+        "zhvi": 298000,
+        "zhvi_yoy": 5.9,
+        "home_sales": 88,
+        "home_sales_yoy": 1.1,
+        "days_on_market": 40,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-93.265, 44.9778] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "55401",
+        "state": "MN",
+        "city": "Minneapolis",
+        "zhvi": 368000,
+        "zhvi_yoy": 2.6,
+        "home_sales": 37,
+        "home_sales_yoy": -1.8,
+        "days_on_market": 32,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-86.7816, 36.1627] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "37203",
+        "state": "TN",
+        "city": "Nashville",
+        "zhvi": 542000,
+        "zhvi_yoy": 3.9,
+        "home_sales": 41,
+        "home_sales_yoy": 2.0,
+        "days_on_market": 34,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-80.8431, 35.2271] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "28202",
+        "state": "NC",
+        "city": "Charlotte",
+        "zhvi": 412000,
+        "zhvi_yoy": 4.0,
+        "home_sales": 49,
+        "home_sales_yoy": 0.9,
+        "days_on_market": 37,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [-75.1652, 39.9526] },
+      "properties": {
+        "region_type": "zip",
+        "zip": "19103",
+        "state": "PA",
+        "city": "Philadelphia",
+        "zhvi": 428000,
+        "zhvi_yoy": 3.3,
+        "home_sales": 35,
+        "home_sales_yoy": -0.5,
+        "days_on_market": 30,
+        "data_note": "DEMO_PLACEHOLDER"
+      }
+    }
+  ]
+}
