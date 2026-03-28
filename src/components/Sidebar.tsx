@@ -2,8 +2,6 @@ import type { GeographyMode, MetricDef } from "../types";
 import { formatMetricValue } from "../lib/formatMetricValue";
 import "./sidebar.css";
 
-type Preset = "all" | "cheapest" | "expensive" | "high_growth" | "cooling";
-
 function familyMembersInGroup(metrics: MetricDef[], group: string, familyId: string) {
   return metrics
     .filter((m) => m.group === group && m.metricFamily === familyId)
@@ -17,8 +15,6 @@ type Props = {
   metrics: MetricDef[];
   selectedMetric: string;
   onSelectMetric: (id: string) => void;
-  preset: Preset;
-  onPreset: (p: Preset) => void;
   perspective: PerspectiveMode;
   onPerspective: (p: PerspectiveMode) => void;
   rangeDomain: { min: number; max: number };
@@ -36,8 +32,6 @@ export function Sidebar({
   metrics,
   selectedMetric,
   onSelectMetric,
-  preset,
-  onPreset,
   perspective,
   onPerspective,
   rangeDomain,
@@ -189,66 +183,30 @@ export function Sidebar({
       </section>
 
       <section className="sidebar-section">
-        <h2 className="sidebar-heading">Filters</h2>
-        <div className="filter-grid">
-          <button
-            type="button"
-            className={preset === "cheapest" ? "filter-btn on" : "filter-btn"}
-            onClick={() => onPreset("cheapest")}
-          >
-            Cheapest
-          </button>
-          <button
-            type="button"
-            className={preset === "expensive" ? "filter-btn on" : "filter-btn"}
-            onClick={() => onPreset("expensive")}
-          >
-            Most expensive
-          </button>
-          <button
-            type="button"
-            className={preset === "high_growth" ? "filter-btn on" : "filter-btn"}
-            onClick={() => onPreset("high_growth")}
-          >
-            High value growth
-          </button>
-          <button
-            type="button"
-            className={preset === "cooling" ? "filter-btn on" : "filter-btn"}
-            onClick={() => onPreset("cooling")}
-          >
-            Cooling markets
-          </button>
-          <button type="button" className="filter-btn reset" onClick={() => onPreset("all")}>
-            Reset
-          </button>
-        </div>
-      </section>
-
-      <section className="sidebar-section">
-        <h2 className="sidebar-heading">Range filter</h2>
-        <p className="sidebar-hint">Filter selected metric by min/max within current view.</p>
+        <h2 className="sidebar-heading">Range</h2>
         <div className="range-box">
           <div className="range-values">
-            <span>Min: {formatMetricValue(rangeMin, metricDef?.unit ?? "count")}</span>
-            <span>Max: {formatMetricValue(rangeMax, metricDef?.unit ?? "count")}</span>
+            <span>{formatMetricValue(Math.min(rangeMin, rangeMax), metricDef?.unit ?? "count")}</span>
+            <span>{formatMetricValue(Math.max(rangeMin, rangeMax), metricDef?.unit ?? "count")}</span>
           </div>
-          <input
-            type="range"
-            min={rangeDomain.min}
-            max={rangeDomain.max}
-            step={(rangeDomain.max - rangeDomain.min) / 200 || 1}
-            value={rangeMin}
-            onChange={(e) => onRangeMinChange(Number(e.target.value))}
-          />
-          <input
-            type="range"
-            min={rangeDomain.min}
-            max={rangeDomain.max}
-            step={(rangeDomain.max - rangeDomain.min) / 200 || 1}
-            value={rangeMax}
-            onChange={(e) => onRangeMaxChange(Number(e.target.value))}
-          />
+          <div className="range-dual">
+            <input
+              type="range"
+              min={rangeDomain.min}
+              max={rangeDomain.max}
+              step={(rangeDomain.max - rangeDomain.min) / 200 || 1}
+              value={Math.min(rangeMin, rangeMax)}
+              onChange={(e) => onRangeMinChange(Number(e.target.value))}
+            />
+            <input
+              type="range"
+              min={rangeDomain.min}
+              max={rangeDomain.max}
+              step={(rangeDomain.max - rangeDomain.min) / 200 || 1}
+              value={Math.max(rangeMin, rangeMax)}
+              onChange={(e) => onRangeMaxChange(Number(e.target.value))}
+            />
+          </div>
         </div>
       </section>
 

@@ -400,8 +400,6 @@ export default function App() {
           metrics={metrics}
           selectedMetric={selectedMetric}
           onSelectMetric={onSelectMetric}
-          preset={preset}
-          onPreset={setPreset}
           perspective={perspective}
           onPerspective={setPerspective}
           rangeDomain={metricDomain}

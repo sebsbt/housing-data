@@ -6,7 +6,8 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar-section {
@@ -55,9 +56,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 38vh;
-  overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 2px;
 }
 
 .metric-group-title {
@@ -264,8 +263,25 @@
   color: var(--muted);
 }
 
-.range-box input[type="range"] {
+.range-dual {
+  position: relative;
+  height: 26px;
+}
+
+.range-dual input[type="range"] {
+  position: absolute;
+  inset: 0;
   width: 100%;
+  background: transparent;
+  pointer-events: none;
+}
+
+.range-dual input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+}
+
+.range-dual input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
 }
 
 @media (max-width: 900px) {
