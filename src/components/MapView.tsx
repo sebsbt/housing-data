@@ -122,6 +122,7 @@ export function MapView({
   const hoveredIdRef = useRef<string | number | null>(null);
   const selectedIdRef = useRef<string | number | null>(null);
   const geographyRef = useRef(geography);
+  const viewportCacheRef = useRef<Map<string, { geojson: FeatureCollection; hint: string | null }>>(new Map());
   const syncMarketsLayersRef = useRef<(() => void) | null>(null);
   const onZipLoadRef = useRef(onZipViewportLoad);
   onZipLoadRef.current = onZipViewportLoad;
@@ -249,6 +250,14 @@ export function MapView({
       const south = b.getSouth();
       const east = b.getEast();
       const north = b.getNorth();
+      const zBucket = Math.floor(z * 2) / 2;
+      const key = `${zBucket}|${west.toFixed(2)}|${south.toFixed(2)}|${east.toFixed(2)}|${north.toFixed(2)}|${Math.round(salesYearRef.current ?? 0)}`;
+      const cached = viewportCacheRef.current.get(key);
+      if (cached) {
+        onZipLoadRef.current?.(cached.geojson, cached.hint ?? null);
+        return;
+      }
+
       zctaAbort?.abort();
       const ac = new AbortController();
       zctaAbort = ac;
@@ -275,6 +284,12 @@ export function MapView({
           hint: string | null;
         };
         if (ac.signal.aborted) return;
+        viewportCacheRef.current.set(key, { geojson: body.geojson, hint: body.hint ?? null });
+        // simple cap to prevent unbounded growth
+        if (viewportCacheRef.current.size > 80) {
+          const first = viewportCacheRef.current.keys().next().value;
+          if (first) viewportCacheRef.current.delete(first);
+        }
         onZipLoadRef.current?.(body.geojson, body.hint ?? null);
       } catch (e) {
         if (e instanceof DOMException && e.name === "AbortError") return;
