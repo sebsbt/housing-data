@@ -605,6 +605,7 @@ export function MapView({
         const noData = !hasMetric || (zhvi == null && yoy == null && sales == null);
         const hasValueData = zhvi != null || yoy != null || mom != null;
         const hasMarketData = sales != null || syoy != null || dom != null;
+        const censusUrl = `https://api.census.gov/data/2023/acs/acs5?get=NAME,B19013_001E,B25064_001E,B01003_001E&for=zip%20code%20tabulation%20area:${encodeURIComponent(String(p.zip ?? ""))}`;
         const html = `
           <div class="popup-inner">
             <div class="popup-title">${escapeHtml(title)}</div>
@@ -631,6 +632,7 @@ export function MapView({
             </table>
             <p class="popup-note">${noData ? "No metrics for this area — add it to your seed or ingest." : ""}${note.includes("DEMO") || note.includes("demo") ? " Demo seed where available." : ""}</p>
             <p class="popup-note">Value data: ${hasValueData ? "available" : "missing"} · Market activity data: ${hasMarketData ? "available" : "missing"}</p>
+            <p class="popup-note">Sources: <a href="https://www.zillow.com/research/data/" target="_blank" rel="noreferrer">Zillow</a> · <a href="https://www.redfin.com/news/data-center/" target="_blank" rel="noreferrer">Redfin</a> · <a href="${censusUrl}" target="_blank" rel="noreferrer">Census ACS (ZIP)</a></p>
           </div>
         `;
         new maplibregl.Popup({ maxWidth: "320px" })

@@ -26,6 +26,8 @@ type Props = {
   rangeMax: number;
   onRangeMinChange: (v: number) => void;
   onRangeMaxChange: (v: number) => void;
+  showHelperText: boolean;
+  onShowHelperText: (v: boolean) => void;
   metricDef: MetricDef | undefined;
 };
 
@@ -43,6 +45,8 @@ export function Sidebar({
   rangeMax,
   onRangeMinChange,
   onRangeMaxChange,
+  showHelperText,
+  onShowHelperText,
   metricDef,
 }: Props) {
   const groups = [...new Set(metrics.map((m) => m.group))];
@@ -67,31 +71,17 @@ export function Sidebar({
             Seller view
           </button>
         </div>
-        <p className="sidebar-hint">
-          Pick a metric to color regions. In <strong>Zip</strong> mode, every ZCTA on
-          screen is loaded from Census when you pan/zoom; only ZIPs in your seed/ingest
-          get metric colors. Values should come from your{" "}
-          <a
-            href="https://www.zillow.com/research/data/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Zillow Research
-          </a>{" "}
-          or{" "}
-          <a href="https://www.redfin.com/news/data-center/" target="_blank" rel="noreferrer">
-            Redfin Data Center
-          </a>{" "}
-          CSV exports (no scraping).
-        </p>
-        {geography === "zip" && (
-          <p className="sidebar-hint sidebar-hint-secondary">
-            <strong>ZCTA vs. USPS ZIP:</strong> The map uses Census{" "}
-            <abbr title="ZIP Code Tabulation Area">ZCTA</abbr> polygons (approximate
-            delivery areas), not USPS routing geometry. Some USPS ZIPs have no ZCTA.
-            Only ZCTAs <em>intersecting your current map view</em> are loaded (with zoom
-            and area limits) so the app stays fast—not every code in the country at once.
-          </p>
+        {showHelperText && (
+          <>
+            <p className="sidebar-hint">
+              Pick a metric and use Buyer/Seller mode to color the map.
+            </p>
+            {geography === "zip" && (
+              <p className="sidebar-hint sidebar-hint-secondary">
+                ZIP mode uses Census ZCTA boundaries in the current view for speed.
+              </p>
+            )}
+          </>
         )}
         <div className="metric-groups">
           {groups.map((g) => {
@@ -260,6 +250,18 @@ export function Sidebar({
             onChange={(e) => onRangeMaxChange(Number(e.target.value))}
           />
         </div>
+      </section>
+
+      <section className="sidebar-section">
+        <h2 className="sidebar-heading">Settings</h2>
+        <label className="sidebar-hint" style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 0 }}>
+          <input
+            type="checkbox"
+            checked={showHelperText}
+            onChange={(e) => onShowHelperText(e.target.checked)}
+          />
+          Show helper text
+        </label>
       </section>
 
       <section className="sidebar-section detail">

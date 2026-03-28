@@ -148,6 +148,7 @@ export default function App() {
   const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
   const [rangeMin, setRangeMin] = useState<number | null>(null);
   const [rangeMax, setRangeMax] = useState<number | null>(null);
+  const [showHelperText, setShowHelperText] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
@@ -408,6 +409,8 @@ export default function App() {
           rangeMax={rangeMax ?? metricDomain.max}
           onRangeMinChange={setRangeMin}
           onRangeMaxChange={setRangeMax}
+          showHelperText={showHelperText}
+          onShowHelperText={setShowHelperText}
           metricDef={selectedMetricDef}
         />
         <main className="map-main">
