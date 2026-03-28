@@ -49,7 +49,7 @@ export function Sidebar({
     <aside className="sidebar">
       <section className="sidebar-section">
         <h2 className="sidebar-heading">Popular data</h2>
-        <div className="filter-grid" style={{ marginBottom: 10 }}>
+        <div className="filter-grid" style={{ marginBottom: 8 }}>
           <button
             type="button"
             className={perspective === "buyer" ? "filter-btn on" : "filter-btn"}
@@ -65,6 +65,9 @@ export function Sidebar({
             Seller view
           </button>
         </div>
+        <p className="sidebar-hint" style={{ marginTop: 0 }}>
+          Green = more favorable for {perspective === "buyer" ? "buyers" : "sellers"}; red = less favorable.
+        </p>
         {showHelperText && (
           <>
             <p className="sidebar-hint">

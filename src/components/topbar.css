@@ -19,8 +19,14 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--accent), #2563eb);
+  background: linear-gradient(135deg, #22c55e, #2563eb);
   box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #ecfeff;
 }
 
 .brand-title {

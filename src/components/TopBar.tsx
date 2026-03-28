@@ -31,12 +31,9 @@ export function TopBar({
   return (
     <header className="topbar">
       <div className="topbar-brand">
-        <span className="brand-mark" aria-hidden />
+        <span className="brand-mark" aria-hidden>ZS</span>
         <div>
-          <div className="brand-title">Housing Market Map</div>
-          <div className="brand-sub">
-            Census boundaries · metrics from public research files you ingest (no proprietary data in repo)
-          </div>
+          <div className="brand-title">ZipScope Atlas</div>
         </div>
       </div>
 
