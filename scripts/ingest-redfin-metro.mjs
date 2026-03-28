@@ -1,6 +1,6 @@
 /**
- * Minimal helper for Redfin Data Center CSVs (public download). Files vary by
- * release; this script expects columns similar to:
+ * Minimal helper for Redfin Data Center CSVs (public research download — not a proprietary API).
+ * Files vary by release; this script expects columns similar to:
  *   REGION_TYPE, REGION, ... numeric month columns ...
  *
  * You must provide a mapping file TSV: region_key, lat, lng

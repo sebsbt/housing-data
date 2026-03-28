@@ -14,6 +14,9 @@ RUN npm install --omit=dev
 COPY --from=build /app/dist ./dist
 COPY server ./server
 COPY data ./data
+# Default for local `docker run`; Railway (and similar) override PORT at runtime.
 ENV PORT=8080
 EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=25s --retries=3 \
+  CMD node -e "const p=process.env.PORT||8080;fetch('http://127.0.0.1:'+p+'/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
 CMD ["node", "server/index.mjs"]

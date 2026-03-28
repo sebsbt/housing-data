@@ -10,7 +10,7 @@ This repo is a **local / Docker / Railway**-friendly stack:
 - **Regions (ZIP):** If **`data/tiles/zcta.pmtiles`** exists, ZIP mode uses **vector tiles** (MapLibre + [PMTiles](https://github.com/protomaps/pmtiles)) served at **`/tiles/zcta.pmtiles`** with metrics baked in from `features-zip` (including per-year `home_sales_YYYY` for the year slider). Otherwise ZIP mode loads **every 2020 ZCTA in the viewport** via `GET /api/zcta-viewport` (Census TIGERweb), with **in-memory + disk** cache under `data/cache/zcta-viewport/`. **Metro** view uses bundled `features-metro.geojson`. **Zillow-style numbers** come from `data/zip-metrics-seed.geojson` at server start (not from live Zillow APIs). **Hover** highlights in **amber**; **click** opens the popup.
 - **Build ZIP vector tiles:** after `npm run build:regions`, run **`npm run build:pmtiles`** (needs [tippecanoe](https://github.com/felt/tippecanoe) on `PATH` or Docker with `ghcr.io/jtmiclat/tippecanoe-docker:latest`). Vite dev proxies **`/tiles`** to the API like **`/api`**.
 - **Home sales by year:** Seed ZIPs can include a `sales_by_year` object (e.g. `"2022": 40`). Use **`GET /api/sales-years`** for the year list; **`GET /api/zip-metric-ranges?year=YYYY`** and **`GET /api/zcta-viewport?...&year=YYYY`** apply that year to merged `home_sales`. The UI shows a **year slider and play control** when **Home sales** is selected in Zip mode.
-- **Metrics files:** `data/features-zip.geojson`, `data/features-metro.geojson`, and `data/metrics.json`. Demo dollar/count/% values are placeholders — replace via ingest scripts using **only** official Zillow/Redfin downloads (no scraping).
+- **Metrics files:** `data/features-zip.geojson`, `data/features-metro.geojson`, and `data/metrics.json`. Bundled demo dollar/count/% values are **synthetic placeholders**, not proprietary or live listing data — replace them using **only** publicly available, vendor-published research files (see Data policy below).
 
 Regenerate boundaries + merge demo metrics (requires network):
 
@@ -22,12 +22,17 @@ Reads `data/zip-metrics-seed.geojson` and refreshes `features-zip.geojson` / `fe
 
 Optional: **`npm run build:pmtiles`** — writes `data/tiles/zcta.pmtiles` for faster ZIP rendering (see Regions above).
 
-## Data policy (Zillow / Redfin only)
+## Data policy: public sources only
 
-- **Zillow:** use the public research datasets from [Zillow Research Data](https://www.zillow.com/research/data/).
-- **Redfin:** use the public files from the [Redfin Data Center](https://www.redfin.com/news/data-center/).
+This repository is intended to use **only publicly available data** that you obtain yourself under each provider’s published terms:
 
-Zillow/Redfin tables are keyed by region (ZIP, metro, etc.) and **do not include map polygons**. This app joins your metrics to **Census cartographic boundaries** for visualization (public domain). The **numeric housing fields** should come from Zillow/Redfin exports per your compliance review. For custom pipelines, `scripts/ingest-zhvi-zip.mjs` still supports a ZIP→lat/lng TSV if you only need centroid workflows.
+- **No proprietary or licensed third-party datasets** are bundled, committed, or required to run the demo.
+- **No scraping** of consumer listing sites or private APIs — use **official research downloads** and **government open data** only.
+- **Zillow:** public research datasets from [Zillow Research Data](https://www.zillow.com/research/data/) (e.g. ZHVI CSVs), per Zillow’s terms for those files.
+- **Redfin:** public files from the [Redfin Data Center](https://www.redfin.com/news/data-center/), per Redfin’s terms for those files.
+- **Map boundaries:** U.S. Census TIGERweb / ZCTA and related cartographic layers (public domain).
+
+Zillow/Redfin research tables are keyed by region (ZIP, metro, etc.) and **do not include map polygons**. This app joins your metrics to **Census** boundaries for visualization. For coordinates-only workflows, `scripts/ingest-zhvi-zip.mjs` supports a ZIP→lat/lng TSV built from any geography source **you are allowed to use**. You are responsible for complying with each data provider’s license and attribution requirements.
 
 ## Run locally
 
@@ -89,13 +94,15 @@ node scripts/ingest-redfin-metro.mjs --csv ./data/raw/redfin.csv --geo ./data/ra
 
 ## Railway
 
-- **Dockerfile** deploy: set root directory to this folder, expose the service port Railway injects as `PORT` (the server reads `process.env.PORT`). Do **not** set `LISTEN_HOST=127.0.0.1` on a PaaS—the default production bind (`0.0.0.0`) is required for the platform to reach your app.
-- **Build:** image build runs `npm run build`.
-- **Start:** `node server/index.mjs` (default `CMD` in Dockerfile).
+- **[`railway.toml`](railway.toml)** sets **`builder = "DOCKERFILE"`**, **`healthcheckPath = "/api/health"`**, and a **120s** healthcheck timeout so deploys wait for the app (and Census cold paths) before cutting traffic.
+- **Port:** Railway sets **`PORT`** at runtime; the server uses `process.env.PORT` (see [`server/index.mjs`](server/index.mjs)). Do **not** set **`LISTEN_HOST=127.0.0.1`**—production already binds **`0.0.0.0`** so the platform can reach the container.
+- **Dockerfile:** multi-stage build runs **`npm run build`**, then **`node server/index.mjs`**. The image includes a **`HEALTHCHECK`** against `/api/health` using the same `PORT`.
+- **`.dockerignore`** excludes `data/cache`, `data/raw`, and `.env*` so local cache/secrets are not copied into the image.
 
-No database is required; ship updated `data/features.geojson` with your deployment artifact or mount a volume if you prefer.
+No database is required; ship updated GeoJSON / tiles under `data/` with your deploy artifact (or mount a volume) if you prefer not to bake data into the image.
 
 ## License / attribution
 
 - Basemap: [CARTO](https://carto.com/basemaps/) via MapLibre style URL (see app code).
 - Zillow and Redfin are trademarks of their respective owners; this project is not affiliated with them.
+- **Data you add:** follow each provider’s terms; this repo ships **only synthetic demo numbers** plus pointers to **public** research downloads — not proprietary datasets.

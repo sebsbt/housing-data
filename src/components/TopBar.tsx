@@ -26,7 +26,7 @@ export function TopBar({ geography, onGeographyChange, tableOpen, onToggleTable 
         <div>
           <div className="brand-title">Housing Market Map</div>
           <div className="brand-sub">
-            ZCTA / metro boundaries (Census) · metrics from Zillow/Redfin files you ingest
+            Census boundaries · metrics from public research files you ingest (no proprietary data in repo)
           </div>
         </div>
       </div>

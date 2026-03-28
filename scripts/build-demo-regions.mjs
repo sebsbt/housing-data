@@ -177,7 +177,8 @@ async function main() {
         home_sales: def.home_sales ?? null,
         home_sales_yoy: def.home_sales_yoy ?? null,
         days_on_market: def.days_on_market ?? null,
-        data_note: "DEMO_PLACEHOLDER — metrics from Zillow/Redfin public files in production",
+        data_note:
+          "Synthetic demo metrics only — not real market data; replace with public Zillow/Redfin research CSVs",
         geoid: f.properties?.GEOID ?? null,
       },
     };

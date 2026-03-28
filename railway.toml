@@ -1,0 +1,9 @@
+# Railway config-as-code: https://docs.railway.app/deploy/config-as-code
+# Railway injects PORT at runtime; the server binds 0.0.0.0 in production (see server/index.mjs).
+
+[build]
+builder = "DOCKERFILE"
+
+[deploy]
+healthcheckPath = "/api/health"
+healthcheckTimeout = 120

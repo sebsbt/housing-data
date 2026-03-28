@@ -15,7 +15,7 @@
         "home_sales": 42,
         "home_sales_yoy": -6.1,
         "days_on_market": 38,
-        "data_note": "DEMO_PLACEHOLDER — replace via ingest from Zillow/Redfin public data files"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public Zillow/Redfin research CSVs"
       }
     },
     {
@@ -31,7 +31,7 @@
         "home_sales": 11,
         "home_sales_yoy": 4.5,
         "days_on_market": 52,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -47,7 +47,7 @@
         "home_sales": 28,
         "home_sales_yoy": -9.2,
         "days_on_market": 31,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -63,7 +63,7 @@
         "home_sales": 55,
         "home_sales_yoy": 1.2,
         "days_on_market": 29,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -79,7 +79,7 @@
         "home_sales": 33,
         "home_sales_yoy": -3.8,
         "days_on_market": 24,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -95,7 +95,7 @@
         "home_sales": 40,
         "home_sales_yoy": 0.4,
         "days_on_market": 22,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -111,7 +111,7 @@
         "home_sales": 62,
         "home_sales_yoy": 2.9,
         "days_on_market": 35,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -127,7 +127,7 @@
         "home_sales": 71,
         "home_sales_yoy": -4.0,
         "days_on_market": 41,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -143,7 +143,7 @@
         "home_sales": 36,
         "home_sales_yoy": 5.5,
         "days_on_market": 48,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -159,7 +159,7 @@
         "home_sales": 19,
         "home_sales_yoy": -2.1,
         "days_on_market": 27,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -175,7 +175,7 @@
         "home_sales": 24,
         "home_sales_yoy": -1.0,
         "days_on_market": 33,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -191,7 +191,7 @@
         "home_sales": 44,
         "home_sales_yoy": 3.3,
         "days_on_market": 26,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -207,7 +207,7 @@
         "home_sales": 51,
         "home_sales_yoy": -2.4,
         "days_on_market": 39,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -223,7 +223,7 @@
         "home_sales": 47,
         "home_sales_yoy": -5.6,
         "days_on_market": 44,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -239,7 +239,7 @@
         "home_sales": 30,
         "home_sales_yoy": -7.4,
         "days_on_market": 36,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -255,7 +255,7 @@
         "home_sales": 88,
         "home_sales_yoy": 1.1,
         "days_on_market": 40,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -271,7 +271,7 @@
         "home_sales": 37,
         "home_sales_yoy": -1.8,
         "days_on_market": 32,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -287,7 +287,7 @@
         "home_sales": 41,
         "home_sales_yoy": 2.0,
         "days_on_market": 34,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -303,7 +303,7 @@
         "home_sales": 49,
         "home_sales_yoy": 0.9,
         "days_on_market": 37,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     },
     {
@@ -319,7 +319,7 @@
         "home_sales": 35,
         "home_sales_yoy": -0.5,
         "days_on_market": 30,
-        "data_note": "DEMO_PLACEHOLDER"
+        "data_note": "Synthetic demo only — not proprietary or live data; replace with public research CSVs"
       }
     }
   ]

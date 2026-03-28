@@ -3,4 +3,8 @@ dist
 .git
 *.log
 .DS_Store
+.env
+.env.*
+.cursor
 data/raw
+data/cache

@@ -1,6 +1,6 @@
 /**
- * Merge a Zillow Research ZIP-level ZHVI CSV (public download) with a ZIP→lat/lng TSV
- * to produce data/features.geojson.
+ * Merge a Zillow Research ZIP-level ZHVI CSV (public research download — not a proprietary feed)
+ * with a ZIP→lat/lng TSV to produce data/features.geojson.
  *
  * Zillow: https://www.zillow.com/research/data/  (choose a ZIP-level ZHVI file)
  *
