@@ -500,14 +500,45 @@ function TableDrawer({
   const rows: (Record<string, unknown> & { key: string })[] = data.features.map(
     (f, i) => {
       const p = f.properties ?? {};
-      const key =
-        geography === "metro"
-          ? String(p.cbsa ?? i)
-          : String(p.zip ?? i);
+      const key = geography === "metro" ? String(p.cbsa ?? i) : String(p.zip ?? i);
       return { key, ...p };
     },
   );
   const isMetro = geography === "metro";
+
+  const [sortKey, setSortKey] = useState<string>(isMetro ? "metro_name" : "zip");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+  const onSort = (key: string) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const sortedRows = useMemo(() => {
+    const out = [...rows];
+    out.sort((a, b) => {
+      const av = a[sortKey];
+      const bv = b[sortKey];
+      const an = av != null && Number.isFinite(Number(av)) ? Number(av) : null;
+      const bn = bv != null && Number.isFinite(Number(bv)) ? Number(bv) : null;
+      let cmp = 0;
+      if (an != null && bn != null) cmp = an - bn;
+      else cmp = String(av ?? "").localeCompare(String(bv ?? ""));
+      return sortDir === "asc" ? cmp : -cmp;
+    });
+    return out;
+  }, [rows, sortDir, sortKey]);
+
+  const SortTh = ({ label, keyName }: { label: string; keyName: string }) => (
+    <th onClick={() => onSort(keyName)} style={{ cursor: "pointer", userSelect: "none" }}>
+      {label} {sortKey === keyName ? (sortDir === "asc" ? "▲" : "▼") : ""}
+    </th>
+  );
+
   return (
     <div className="table-drawer">
       <div className="table-drawer-head">
@@ -522,30 +553,30 @@ function TableDrawer({
             <tr>
               {isMetro ? (
                 <>
-                  <th>CBSA</th>
-                  <th>Metro</th>
+                  <SortTh label="CBSA" keyName="cbsa" />
+                  <SortTh label="Metro" keyName="metro_name" />
                 </>
               ) : (
                 <>
-                  <th>ZIP</th>
-                  <th>City</th>
-                  <th>ST</th>
+                  <SortTh label="ZIP" keyName="zip" />
+                  <SortTh label="City" keyName="city" />
+                  <SortTh label="ST" keyName="state" />
                 </>
               )}
-              <th>Home value</th>
-              <th>YoY %</th>
-              <th>MoM %</th>
-              <th>Sales</th>
-              <th>Sales YoY %</th>
-              <th>DOM</th>
-              <th>Income</th>
-              <th>Rent</th>
-              <th>Pop</th>
-              <th>P/I</th>
+              <SortTh label="Home value" keyName="zhvi" />
+              <SortTh label="YoY %" keyName="zhvi_yoy" />
+              <SortTh label="MoM %" keyName="zhvi_mom" />
+              <SortTh label="Sales" keyName="home_sales" />
+              <SortTh label="Sales YoY %" keyName="home_sales_yoy" />
+              <SortTh label="DOM" keyName="days_on_market" />
+              <SortTh label="Income" keyName="median_income" />
+              <SortTh label="Rent" keyName="median_rent" />
+              <SortTh label="Pop" keyName="population" />
+              <SortTh label="P/I" keyName="price_to_income" />
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
+            {sortedRows.map((r) => (
               <tr key={r.key}>
                 {isMetro ? (
                   <>
@@ -575,8 +606,7 @@ function TableDrawer({
         </table>
       </div>
       <p className="table-foot">
-        Sorted columns follow selected metric: <strong>{metricId}</strong> (export
-        coming next).
+        Click a column header to sort. Click again to invert order.
       </p>
     </div>
   );
