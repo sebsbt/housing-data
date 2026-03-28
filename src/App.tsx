@@ -32,10 +32,36 @@ function domainForFeatures(
   if (!fc || fc.features.length === 0) return { min: 0, max: 1 };
   const vals = fc.features
     .map((f) => f.properties?.[metricId])
-    .filter((v) => v != null && !Number.isNaN(Number(v)))
+    .filter((v) => v != null && Number.isFinite(Number(v)))
     .map((v) => Number(v));
   if (vals.length === 0) return { min: 0, max: 1 };
-  return { min: Math.min(...vals), max: Math.max(...vals) };
+
+  const n = vals.length;
+  const mean = vals.reduce((a, b) => a + b, 0) / n;
+  const variance = vals.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+  const std = Math.sqrt(variance);
+
+  const obsMin = Math.min(...vals);
+  const obsMax = Math.max(...vals);
+  if (!Number.isFinite(std) || std === 0) {
+    return obsMin === obsMax
+      ? { min: obsMin - 1, max: obsMax + 1 }
+      : { min: obsMin, max: obsMax };
+  }
+
+  // Robust visual range: mean ± 2σ, clamped to observed bounds.
+  let lo = mean - 2 * std;
+  let hi = mean + 2 * std;
+  lo = Math.max(lo, obsMin);
+  hi = Math.min(hi, obsMax);
+
+  if (!Number.isFinite(lo) || !Number.isFinite(hi) || lo >= hi) {
+    return obsMin === obsMax
+      ? { min: obsMin - 1, max: obsMax + 1 }
+      : { min: obsMin, max: obsMax };
+  }
+
+  return { min: lo, max: hi };
 }
 
 function percentile(sorted: number[], p: number) {
@@ -292,13 +318,10 @@ export default function App() {
     [metrics, selectedMetric],
   );
 
-  const metricDomain = useMemo(() => {
-    if (geography === "zip") {
-      const r = zipMetricRanges?.[selectedMetric];
-      if (r) return r;
-    }
-    return domainForFeatures(filteredFc, selectedMetric);
-  }, [geography, zipMetricRanges, selectedMetric, filteredFc]);
+  const metricDomain = useMemo(
+    () => domainForFeatures(filteredFc, selectedMetric),
+    [selectedMetric, filteredFc],
+  );
 
   const onZipViewportLoad = useCallback((fc: FeatureCollection, hint: string | null) => {
     setRawFc(fc);
