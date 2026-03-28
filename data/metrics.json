@@ -38,6 +38,9 @@
     "group": "Market Trends",
     "source": "redfin",
     "unit": "count",
+    "metricFamily": "home_sales",
+    "familyLabel": "Home sales",
+    "familyOrder": 0,
     "description": "Homes sold (exact definition follows the Redfin Data Center file you ingest)."
   },
   {
@@ -46,6 +49,9 @@
     "group": "Market Trends",
     "source": "redfin",
     "unit": "percent",
+    "metricFamily": "home_sales",
+    "familyLabel": "Home sales",
+    "familyOrder": 1,
     "description": "Year-over-year change in home sales from your Redfin Data Center export."
   },
   {
@@ -54,6 +60,9 @@
     "group": "Market Trends",
     "source": "redfin",
     "unit": "days",
+    "metricFamily": "days_on_market",
+    "familyLabel": "Days on market",
+    "familyOrder": 0,
     "description": "Median days on market when present in your Redfin ingest."
   }
 ]

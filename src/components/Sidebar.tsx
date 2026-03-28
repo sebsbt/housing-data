@@ -107,14 +107,19 @@ export function Sidebar({
                               aria-label={`${famLabel} measure`}
                             >
                               {members.map((mem) => {
+                                const id = mem.id.toLowerCase();
                                 const short =
-                                  mem.id === "zhvi"
-                                    ? "$"
-                                    : mem.id === "zhvi_yoy"
-                                      ? "YoY"
-                                      : mem.id === "zhvi_mom"
-                                        ? "MoM"
-                                        : mem.label.slice(0, 4);
+                                  id.includes("_yoy") || id.includes("yoy")
+                                    ? "YoY"
+                                    : id.includes("_mom") || id.includes("mom")
+                                      ? "MoM"
+                                      : mem.unit === "usd"
+                                        ? "$"
+                                        : mem.unit === "count"
+                                          ? "Lvl"
+                                          : mem.unit === "days"
+                                            ? "DOM"
+                                            : mem.label.slice(0, 4);
                                 const pressed = selectedMetric === mem.id;
                                 return (
                                   <button
