@@ -8,11 +8,18 @@
   flex-shrink: 0;
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 220px;
+}
+
 .topbar-brand {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .brand-mark {
@@ -43,10 +50,12 @@
 
 .geo-nav {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 6px;
   flex: 1;
   justify-content: center;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .geo-pill {
@@ -76,9 +85,6 @@
   flex-shrink: 0;
 }
 
-.mobile-only {
-  display: none;
-}
 
 .btn-outline {
   border: 1px solid var(--border);
@@ -114,9 +120,6 @@
     order: 3;
     width: 100%;
     justify-content: flex-start;
-  }
-
-  .mobile-only {
-    display: inline-flex;
+    padding-bottom: 4px;
   }
 }

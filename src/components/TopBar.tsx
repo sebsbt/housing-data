@@ -32,10 +32,15 @@ export function TopBar({
 }: Props) {
   return (
     <header className="topbar">
-      <div className="topbar-brand">
-        <span className="brand-mark" aria-hidden>ZS</span>
-        <div>
-          <div className="brand-title">ZipScope Atlas</div>
+      <div className="topbar-left">
+        <button type="button" className="btn-outline" onClick={onOpenMobileControls}>
+          Controls
+        </button>
+        <div className="topbar-brand">
+          <span className="brand-mark" aria-hidden>ZS</span>
+          <div>
+            <div className="brand-title">ZipScope Atlas</div>
+          </div>
         </div>
       </div>
 
@@ -65,9 +70,6 @@ export function TopBar({
       </nav>
 
       <div className="topbar-actions">
-        <button type="button" className="btn-outline mobile-only" onClick={onOpenMobileControls}>
-          Controls
-        </button>
         <button type="button" className="btn-outline" onClick={onToggleColorblindMode}>
           Settings: {colorblindMode ? "Colorblind" : "Default"}
         </button>
