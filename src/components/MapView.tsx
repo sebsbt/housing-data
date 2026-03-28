@@ -71,6 +71,13 @@ function boundsForCollection(fc: FeatureCollection): maplibregl.LngLatBounds | n
   return n > 0 ? b : null;
 }
 
+function boundsForFeatureGeometry(g: GJGeometry | null | undefined): maplibregl.LngLatBounds | null {
+  if (!g) return null;
+  const b = new maplibregl.LngLatBounds();
+  extendGeometry(b, g);
+  return b.isEmpty() ? null : b;
+}
+
 function pmtilesUrl(): string {
   const o = window.location.origin;
   return `pmtiles://${o}/tiles/zcta.pmtiles`;
@@ -738,6 +745,24 @@ export function MapView({
     } catch {
       /* ignore */
     }
+
+    // Recenter map to selected table row region (ZIP/metro) when geometry is available.
+    const fc = dataRef.current;
+    const target = fc.features.find((f) => {
+      const p = (f.properties ?? {}) as Record<string, unknown>;
+      const id = geography === "metro" ? p.cbsa : p.zip;
+      return String(id ?? "") === String(selectedRegionId);
+    });
+    if (!target) return;
+
+    const b = boundsForFeatureGeometry(target.geometry);
+    if (!b || b.isEmpty()) return;
+
+    map.fitBounds(b, {
+      padding: geography === "zip" ? 120 : 80,
+      maxZoom: geography === "zip" ? 11.8 : 8.2,
+      duration: 550,
+    });
   }, [selectedRegionId, geography, data, zipUsePmtiles]);
 
   return <div ref={containerRef} className="map-canvas" />;
