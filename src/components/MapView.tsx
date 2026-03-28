@@ -598,6 +598,10 @@ export function MapView({
         const note = String(p.data_note ?? "");
         const dom = p.days_on_market != null ? Number(p.days_on_market) : null;
         const syoy = p.home_sales_yoy != null ? Number(p.home_sales_yoy) : null;
+        const medianIncome = p.median_income != null ? Number(p.median_income) : null;
+        const medianRent = p.median_rent != null ? Number(p.median_rent) : null;
+        const population = p.population != null ? Number(p.population) : null;
+        const pti = p.price_to_income != null ? Number(p.price_to_income) : null;
         const noData = !hasMetric || (zhvi == null && yoy == null && sales == null);
         const hasValueData = zhvi != null || yoy != null || mom != null;
         const hasMarketData = sales != null || syoy != null || dom != null;
@@ -619,6 +623,10 @@ export function MapView({
                 <tr><th>Home sales</th><td>${sales != null ? formatMetricValue(sales, "count") : "—"}</td></tr>
                 <tr><th>Sales YoY</th><td>${syoy != null ? formatMetricValue(syoy, "percent") : "—"}</td></tr>
                 <tr><th>Days on market</th><td>${dom != null ? formatMetricValue(dom, "days") : "—"}</td></tr>
+                <tr><th>Median income</th><td>${medianIncome != null ? formatMetricValue(medianIncome, "usd") : "—"}</td></tr>
+                <tr><th>Median rent</th><td>${medianRent != null ? formatMetricValue(medianRent, "usd") : "—"}</td></tr>
+                <tr><th>Population</th><td>${population != null ? formatMetricValue(population, "count") : "—"}</td></tr>
+                <tr><th>Price/Income</th><td>${pti != null ? formatMetricValue(pti, "count") : "—"}</td></tr>
               </tbody>
             </table>
             <p class="popup-note">${noData ? "No metrics for this area — add it to your seed or ingest." : ""}${note.includes("DEMO") || note.includes("demo") ? " Demo seed where available." : ""}</p>

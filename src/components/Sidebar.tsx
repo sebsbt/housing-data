@@ -1,4 +1,5 @@
 import type { GeographyMode, MetricDef } from "../types";
+import { formatMetricValue } from "../lib/formatMetricValue";
 import "./sidebar.css";
 
 type Preset = "all" | "cheapest" | "expensive" | "high_growth" | "cooling";
@@ -20,6 +21,11 @@ type Props = {
   onPreset: (p: Preset) => void;
   perspective: PerspectiveMode;
   onPerspective: (p: PerspectiveMode) => void;
+  rangeDomain: { min: number; max: number };
+  rangeMin: number;
+  rangeMax: number;
+  onRangeMinChange: (v: number) => void;
+  onRangeMaxChange: (v: number) => void;
   metricDef: MetricDef | undefined;
 };
 
@@ -32,6 +38,11 @@ export function Sidebar({
   onPreset,
   perspective,
   onPerspective,
+  rangeDomain,
+  rangeMin,
+  rangeMax,
+  onRangeMinChange,
+  onRangeMaxChange,
   metricDef,
 }: Props) {
   const groups = [...new Set(metrics.map((m) => m.group))];
@@ -117,10 +128,10 @@ export function Sidebar({
                             >
                               <span className="metric-split-title">{famLabel}</span>
                               <span
-                                className={`src-pill ${src === "zillow" ? "z" : "r"}`}
-                                title={src === "zillow" ? "Zillow" : "Redfin"}
+                                className={`src-pill ${src === "zillow" ? "z" : src === "redfin" ? "r" : "c"}`}
+                                title={src === "zillow" ? "Zillow" : src === "redfin" ? "Redfin" : "Census"}
                               >
-                                {src === "zillow" ? "Z" : "R"}
+                                {src === "zillow" ? "Z" : src === "redfin" ? "R" : "C"}
                               </span>
                             </button>
                             <div
@@ -171,10 +182,10 @@ export function Sidebar({
                         >
                           <span>{m.label}</span>
                           <span
-                            className={`src-pill ${m.source === "zillow" ? "z" : "r"}`}
-                            title={m.source === "zillow" ? "Zillow" : "Redfin"}
+                            className={`src-pill ${m.source === "zillow" ? "z" : m.source === "redfin" ? "r" : "c"}`}
+                            title={m.source === "zillow" ? "Zillow" : m.source === "redfin" ? "Redfin" : "Census"}
                           >
-                            {m.source === "zillow" ? "Z" : "R"}
+                            {m.source === "zillow" ? "Z" : m.source === "redfin" ? "R" : "C"}
                           </span>
                         </button>
                       </li>
@@ -221,6 +232,33 @@ export function Sidebar({
           <button type="button" className="filter-btn reset" onClick={() => onPreset("all")}>
             Reset
           </button>
+        </div>
+      </section>
+
+      <section className="sidebar-section">
+        <h2 className="sidebar-heading">Range filter</h2>
+        <p className="sidebar-hint">Filter selected metric by min/max within current view.</p>
+        <div className="range-box">
+          <div className="range-values">
+            <span>Min: {formatMetricValue(rangeMin, metricDef?.unit ?? "count")}</span>
+            <span>Max: {formatMetricValue(rangeMax, metricDef?.unit ?? "count")}</span>
+          </div>
+          <input
+            type="range"
+            min={rangeDomain.min}
+            max={rangeDomain.max}
+            step={(rangeDomain.max - rangeDomain.min) / 200 || 1}
+            value={rangeMin}
+            onChange={(e) => onRangeMinChange(Number(e.target.value))}
+          />
+          <input
+            type="range"
+            min={rangeDomain.min}
+            max={rangeDomain.max}
+            step={(rangeDomain.max - rangeDomain.min) / 200 || 1}
+            value={rangeMax}
+            onChange={(e) => onRangeMaxChange(Number(e.target.value))}
+          />
         </div>
       </section>
 

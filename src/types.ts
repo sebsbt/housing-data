@@ -16,7 +16,7 @@ export type FeatureCollection = {
   features: GJFeature[];
 };
 
-export type MetricSource = "zillow" | "redfin";
+export type MetricSource = "zillow" | "redfin" | "census";
 
 export type MetricDef = {
   id: string;

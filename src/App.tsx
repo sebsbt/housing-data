@@ -7,6 +7,7 @@ import { Sidebar } from "./components/Sidebar";
 import { TopBar } from "./components/TopBar";
 import "./app-layout.css";
 import { fetchWithRetry } from "./lib/fetchWithRetry";
+import { resolveHomeSalesForYear } from "./lib/resolveHomeSalesForYear";
 
 type FilterPreset = "all" | "cheapest" | "expensive" | "high_growth" | "cooling";
 type PerspectiveMode = "buyer" | "seller";
@@ -28,12 +29,19 @@ type AppConfig = {
 function domainForFeatures(
   fc: FeatureCollection | null,
   metricId: string,
+  salesYear?: number,
 ): { min: number; max: number } {
   if (!fc || fc.features.length === 0) return { min: 0, max: 1 };
   const vals = fc.features
-    .map((f) => f.properties?.[metricId])
-    .filter((v) => v != null && Number.isFinite(Number(v)))
-    .map((v) => Number(v));
+    .map((f) => {
+      const p = (f.properties ?? {}) as Record<string, unknown>;
+      if (metricId === "home_sales") return resolveHomeSalesForYear(p, salesYear);
+      const raw = p[metricId];
+      if (raw == null || raw === "") return null;
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : null;
+    })
+    .filter((v): v is number => v != null && Number.isFinite(v));
   if (vals.length === 0) return { min: 0, max: 1 };
 
   const n = vals.length;
@@ -138,6 +146,8 @@ export default function App() {
   const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
   const [salesPlaying, setSalesPlaying] = useState(false);
   const [appConfig, setAppConfig] = useState<AppConfig | null>(null);
+  const [rangeMin, setRangeMin] = useState<number | null>(null);
+  const [rangeMax, setRangeMax] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -302,7 +312,7 @@ export default function App() {
     if (selectedMetric !== "home_sales") setSalesPlaying(false);
   }, [selectedMetric]);
 
-  const filteredFc = useMemo(() => {
+  const presetFc = useMemo(() => {
     if (!rawFc) return null;
     const valueKey =
       preset === "cheapest" || preset === "expensive"
@@ -319,9 +329,35 @@ export default function App() {
   );
 
   const metricDomain = useMemo(
-    () => domainForFeatures(filteredFc, selectedMetric),
-    [selectedMetric, filteredFc],
+    () => domainForFeatures(presetFc, selectedMetric, selectedYear),
+    [selectedMetric, selectedYear, presetFc],
   );
+
+  useEffect(() => {
+    setRangeMin(metricDomain.min);
+    setRangeMax(metricDomain.max);
+  }, [selectedMetric, geography, metricDomain.min, metricDomain.max]);
+
+  const filteredFc = useMemo(() => {
+    if (!presetFc) return null;
+    if (rangeMin == null || rangeMax == null) return presetFc;
+    const lo = Math.min(rangeMin, rangeMax);
+    const hi = Math.max(rangeMin, rangeMax);
+    return {
+      ...presetFc,
+      features: presetFc.features.filter((f) => {
+        const p = (f.properties ?? {}) as Record<string, unknown>;
+        const v =
+          selectedMetric === "home_sales"
+            ? resolveHomeSalesForYear(p, selectedYear)
+            : p[selectedMetric] != null && Number.isFinite(Number(p[selectedMetric]))
+              ? Number(p[selectedMetric])
+              : null;
+        if (v == null) return false;
+        return v >= lo && v <= hi;
+      }),
+    };
+  }, [presetFc, selectedMetric, selectedYear, rangeMin, rangeMax]);
 
   const onZipViewportLoad = useCallback((fc: FeatureCollection, hint: string | null) => {
     setRawFc(fc);
@@ -367,6 +403,11 @@ export default function App() {
           onPreset={setPreset}
           perspective={perspective}
           onPerspective={setPerspective}
+          rangeDomain={metricDomain}
+          rangeMin={rangeMin ?? metricDomain.min}
+          rangeMax={rangeMax ?? metricDomain.max}
+          onRangeMinChange={setRangeMin}
+          onRangeMaxChange={setRangeMax}
           metricDef={selectedMetricDef}
         />
         <main className="map-main">
@@ -496,6 +537,10 @@ function TableDrawer({
               <th>Sales</th>
               <th>Sales YoY %</th>
               <th>DOM</th>
+              <th>Income</th>
+              <th>Rent</th>
+              <th>Pop</th>
+              <th>P/I</th>
             </tr>
           </thead>
           <tbody>
@@ -519,6 +564,10 @@ function TableDrawer({
                 <td>{fmt(r.home_sales, "count")}</td>
                 <td>{fmt(r.home_sales_yoy, "percent")}</td>
                 <td>{fmt(r.days_on_market, "days")}</td>
+                <td>{fmt(r.median_income, "usd")}</td>
+                <td>{fmt(r.median_rent, "usd")}</td>
+                <td>{fmt(r.population, "count")}</td>
+                <td>{fmt(r.price_to_income, "count")}</td>
               </tr>
             ))}
           </tbody>

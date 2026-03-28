@@ -64,5 +64,37 @@
     "familyLabel": "Days on market",
     "familyOrder": 0,
     "description": "Median days on market when present in your Redfin ingest. Public research data only."
+  },
+  {
+    "id": "median_income",
+    "label": "Median Household Income",
+    "group": "Demographics",
+    "source": "census",
+    "unit": "usd",
+    "description": "Median household income (Census ACS 5-year, ZCTA). Publicly available federal data."
+  },
+  {
+    "id": "median_rent",
+    "label": "Median Gross Rent",
+    "group": "Demographics",
+    "source": "census",
+    "unit": "usd",
+    "description": "Median gross rent (Census ACS 5-year, ZCTA). Publicly available federal data."
+  },
+  {
+    "id": "population",
+    "label": "Population",
+    "group": "Demographics",
+    "source": "census",
+    "unit": "count",
+    "description": "Total population (Census ACS 5-year, ZCTA). Publicly available federal data."
+  },
+  {
+    "id": "price_to_income",
+    "label": "Price-to-Income Ratio",
+    "group": "Home Price & Affordability",
+    "source": "census",
+    "unit": "count",
+    "description": "Typical home value divided by median household income (buyer affordability proxy)."
   }
 ]
