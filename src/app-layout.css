@@ -112,9 +112,11 @@
 .data-table th {
   position: sticky;
   top: 0;
-  background: color-mix(in srgb, var(--panel-2) 88%, transparent);
+  z-index: 3;
+  background: var(--panel-2);
   color: var(--muted);
   font-weight: 600;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
 }
 
 .data-table tbody tr:hover {
