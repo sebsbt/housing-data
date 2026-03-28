@@ -31,6 +31,10 @@ app.use(compression());
 
 const zctaPmtilesPath = path.join(root, "data", "tiles", "zcta.pmtiles");
 function zipPmtilesExists() {
+  // Default OFF to avoid showing only a limited seeded ZIP subset when PMTiles isn't full coverage.
+  // Turn on explicitly with ENABLE_ZIP_PMTILES=true after building full nationwide tiles.
+  const explicit = String(process.env.ENABLE_ZIP_PMTILES || "").toLowerCase();
+  if (explicit !== "true" && explicit !== "1") return false;
   try {
     return fs.existsSync(zctaPmtilesPath);
   } catch {
