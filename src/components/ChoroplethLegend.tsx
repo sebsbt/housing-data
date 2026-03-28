@@ -22,6 +22,11 @@ export function ChoroplethLegend({ metric, min, max, geography, perspective = "b
   const low = formatMetricValue(min, metric.unit);
   const high = formatMetricValue(max, metric.unit);
   const gradient = legendGradientCss(metric.id, perspective);
+  const showZero = metric.unit === "percent";
+  const zeroPos =
+    showZero && max > min
+      ? Math.max(0, Math.min(100, ((0 - min) / (max - min)) * 100))
+      : 50;
 
   const legendTitle =
     metric.familyLabel && metric.metricFamily
@@ -36,7 +41,17 @@ export function ChoroplethLegend({ metric, min, max, geography, perspective = "b
           <span className="choropleth-legend-sub"> · {subtitle}</span>
         ) : null}
       </div>
-      <div className="choropleth-legend-rail" style={{ background: gradient }} />
+      <div className="choropleth-legend-rail-wrap">
+        <div className="choropleth-legend-rail" style={{ background: gradient }} />
+        {showZero ? (
+          <>
+            <div className="choropleth-legend-zero-line" style={{ left: `${zeroPos}%` }} />
+            <div className="choropleth-legend-zero-label" style={{ left: `${zeroPos}%` }}>
+              0%
+            </div>
+          </>
+        ) : null}
+      </div>
       <div className="choropleth-legend-ticks">
         <span>{low}</span>
         <span>{high}</span>
