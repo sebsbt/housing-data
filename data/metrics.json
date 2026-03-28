@@ -55,6 +55,14 @@
     "description": "Year-over-year change in home sales from your Redfin Data Center export. Public research data only."
   },
   {
+    "id": "listing_count",
+    "label": "Listing Count",
+    "group": "Market Trends",
+    "source": "redfin",
+    "unit": "count",
+    "description": "Active listing count when available from public Redfin data ingest."
+  },
+  {
     "id": "days_on_market",
     "label": "Days on Market",
     "group": "Market Trends",

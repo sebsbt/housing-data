@@ -584,6 +584,7 @@ function TableDrawer({
               <SortTh label="YoY %" keyName="zhvi_yoy" />
               <SortTh label="MoM %" keyName="zhvi_mom" />
               <SortTh label="Sales" keyName="home_sales" />
+              <SortTh label="Listings" keyName="listing_count" />
               <SortTh label="Sales YoY %" keyName="home_sales_yoy" />
               <SortTh label="DOM" keyName="days_on_market" />
               <SortTh label="Income" keyName="median_income" />
@@ -619,6 +620,7 @@ function TableDrawer({
                 <td>{fmt(r.zhvi_yoy, "percent")}</td>
                 <td>{fmt(r.zhvi_mom, "percent")}</td>
                 <td>{fmt(r.home_sales, "count")}</td>
+                <td>{fmt((r.listing_count ?? r.active_listing_count) as unknown, "count")}</td>
                 <td>{fmt(r.home_sales_yoy, "percent")}</td>
                 <td>{fmt(r.days_on_market, "days")}</td>
                 <td>{fmt(r.median_income, "usd")}</td>

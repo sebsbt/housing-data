@@ -628,6 +628,11 @@ export function MapView({
         const mom = p.zhvi_mom != null ? Number(p.zhvi_mom) : null;
         const salesDisplay = getNumericForSelectedMetric(p, "home_sales", geography, sy);
         const sales = salesDisplay != null ? salesDisplay : p.home_sales != null ? Number(p.home_sales) : null;
+        const listingCount = p.listing_count != null
+          ? Number(p.listing_count)
+          : p.active_listing_count != null
+            ? Number(p.active_listing_count)
+            : null;
         const note = String(p.data_note ?? "");
         const dom = p.days_on_market != null ? Number(p.days_on_market) : null;
         const syoy = p.home_sales_yoy != null ? Number(p.home_sales_yoy) : null;
@@ -655,6 +660,7 @@ export function MapView({
                 <tr><th>Value YoY</th><td>${yoy != null ? formatMetricValue(yoy, "percent") : "—"}</td></tr>
                 <tr><th>Value MoM</th><td>${mom != null ? formatMetricValue(mom, "percent") : "—"}</td></tr>
                 <tr><th>Home sales</th><td>${sales != null ? formatMetricValue(sales, "count") : "—"}</td></tr>
+                <tr><th>Listing count</th><td>${listingCount != null ? formatMetricValue(listingCount, "count") : "—"}</td></tr>
                 <tr><th>Sales YoY</th><td>${syoy != null ? formatMetricValue(syoy, "percent") : "—"}</td></tr>
                 <tr><th>Days on market</th><td>${dom != null ? formatMetricValue(dom, "days") : "—"}</td></tr>
                 <tr><th>Median income</th><td>${medianIncome != null ? formatMetricValue(medianIncome, "usd") : "—"}</td></tr>
