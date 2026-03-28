@@ -48,7 +48,8 @@ export function ChoroplethLegend({ metric, min, max, geography, perspective = "b
         </div>
       )}
       <p className="choropleth-legend-foot">
-        Choropleth “heat” by selected field ({perspective} perspective). Hover shows that value in the browser tooltip;
+        Choropleth “heat” by selected field ({perspective} perspective). Scale uses current-view distribution
+        with <strong>mean ± 2σ</strong> (excluding missing values). Hover shows that value in the browser tooltip;
         click opens detail.
       </p>
     </div>
