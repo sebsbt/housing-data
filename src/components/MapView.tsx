@@ -17,7 +17,7 @@ const MIN_ZCTA_ZOOM = 7.75;
 const ZCTA_DEBOUNCE_MS = 280;
 
 // Keep ZIP outlines clearly visible on dark basemap while avoiding heavy overdraw at low zoom.
-const ZIP_OUTLINE_MIN_ZOOM = 7.5;
+const ZIP_OUTLINE_MIN_ZOOM = 6.8;
 
 let pmtilesProtocolRegistered = false;
 function ensurePmtilesProtocol() {
@@ -152,6 +152,9 @@ export function MapView({
         if (map.getLayer("regions-outline")) {
           map.setFilter("regions-outline", ["boolean", false]);
         }
+        if (map.getLayer("regions-outline-casing")) {
+          map.setFilter("regions-outline-casing", ["boolean", false]);
+        }
       } else {
         const f: maplibregl.FilterSpecification = [
           "in",
@@ -161,6 +164,9 @@ export function MapView({
         map.setFilter("regions-fill", f);
         if (map.getLayer("regions-outline")) {
           map.setFilter("regions-outline", f);
+        }
+        if (map.getLayer("regions-outline-casing")) {
+          map.setFilter("regions-outline-casing", f);
         }
       }
       return;
@@ -307,6 +313,23 @@ export function MapView({
         });
 
         map.addLayer({
+          id: "regions-outline-casing",
+          type: "line",
+          source: "markets",
+          "source-layer": ZCTA_SOURCE_LAYER,
+          minzoom: ZIP_OUTLINE_MIN_ZOOM,
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": "rgba(0,0,0,0.85)",
+            "line-opacity": ["interpolate", ["linear"], ["zoom"], ZIP_OUTLINE_MIN_ZOOM, 0.45, 9, 0.6, 12, 0.7],
+            "line-width": ["interpolate", ["linear"], ["zoom"], ZIP_OUTLINE_MIN_ZOOM, 1.8, 9, 2.2, 12, 2.8],
+          },
+        });
+
+        map.addLayer({
           id: "regions-outline",
           type: "line",
           source: "markets",
@@ -321,24 +344,24 @@ export function MapView({
               "case",
               ["boolean", ["feature-state", "hover"], false],
               HOVER_LINE,
-              "rgba(255,255,255,0.72)",
+              "rgba(255,255,255,0.95)",
             ],
             "line-opacity": [
               "interpolate",
               ["linear"],
               ["zoom"],
               ZIP_OUTLINE_MIN_ZOOM,
-              0.55,
+              0.75,
               9,
-              0.8,
+              0.92,
               12,
-              0.95,
+              1,
             ],
             "line-width": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
-              2.6,
-              ["interpolate", ["linear"], ["zoom"], ZIP_OUTLINE_MIN_ZOOM, 0.8, 9, 1.1, 12, 1.6],
+              2.8,
+              ["interpolate", ["linear"], ["zoom"], ZIP_OUTLINE_MIN_ZOOM, 1.1, 9, 1.4, 12, 1.9],
             ],
           },
         });
@@ -400,6 +423,32 @@ export function MapView({
         });
 
         map.addLayer({
+          id: "regions-outline-casing",
+          type: "line",
+          source: "markets",
+          minzoom: geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0,
+          layout: {
+            "line-join": "round",
+            "line-cap": "round",
+          },
+          paint: {
+            "line-color": geography === "zip" ? "rgba(0,0,0,0.85)" : "rgba(0,0,0,0.55)",
+            "line-opacity": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0,
+              geography === "zip" ? 0.45 : 0.4,
+              9,
+              0.6,
+              12,
+              0.7,
+            ],
+            "line-width": ["interpolate", ["linear"], ["zoom"], geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0, 1.8, 9, 2.2, 12, 2.8],
+          },
+        });
+
+        map.addLayer({
           id: "regions-outline",
           type: "line",
           source: "markets",
@@ -413,24 +462,24 @@ export function MapView({
               "case",
               ["boolean", ["feature-state", "hover"], false],
               HOVER_LINE,
-              "rgba(255,255,255,0.72)",
+              geography === "zip" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.75)",
             ],
             "line-opacity": [
               "interpolate",
               ["linear"],
               ["zoom"],
               geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0,
-              geography === "zip" ? 0.55 : 0.7,
+              geography === "zip" ? 0.75 : 0.7,
               9,
-              0.85,
+              0.92,
               12,
-              0.95,
+              1,
             ],
             "line-width": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
-              2.6,
-              ["interpolate", ["linear"], ["zoom"], geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0, 0.8, 9, 1.1, 12, 1.6],
+              2.8,
+              ["interpolate", ["linear"], ["zoom"], geography === "zip" ? ZIP_OUTLINE_MIN_ZOOM : 0, 1.1, 9, 1.4, 12, 1.9],
             ],
           },
         });
