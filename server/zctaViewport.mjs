@@ -47,6 +47,82 @@ export function loadZipMetricsByZip(root, readJson) {
 }
 
 /** Decimal degrees; coarser when zoomed out (smaller MapLibre zoom number). Omit for full detail. */
+export function loadLocalZctaFeatures(readJson) {
+  try {
+    const fc = readJson("data/features-zip.geojson");
+    const feats = fc?.features ?? [];
+    // treat as local/full only when dataset is large enough
+    if (!Array.isArray(feats) || feats.length < 5000) return null;
+    return feats.map((f) => {
+      const p = f.properties ?? {};
+      const z = String(p.zip ?? "").padStart(5, "0");
+      const b = extentFromGeometry(f.geometry);
+      return { feature: f, zip: z, bbox: b };
+    });
+  } catch {
+    return null;
+  }
+}
+
+function extentFromGeometry(g) {
+  if (!g) return null;
+  let xmin = Infinity;
+  let ymin = Infinity;
+  let xmax = -Infinity;
+  let ymax = -Infinity;
+  const walk = (coords) => {
+    if (!Array.isArray(coords)) return;
+    if (coords.length >= 2 && typeof coords[0] === "number" && typeof coords[1] === "number") {
+      const x = coords[0];
+      const y = coords[1];
+      if (x < xmin) xmin = x;
+      if (x > xmax) xmax = x;
+      if (y < ymin) ymin = y;
+      if (y > ymax) ymax = y;
+      return;
+    }
+    for (const c of coords) walk(c);
+  };
+  walk(g.coordinates);
+  if (!Number.isFinite(xmin)) return null;
+  return { west: xmin, south: ymin, east: xmax, north: ymax };
+}
+
+function bboxIntersects(a, b) {
+  return !(a.east < b.west || a.west > b.east || a.north < b.south || a.south > b.north);
+}
+
+export function fetchLocalZctaInBbox(west, south, east, north, localRows, options = {}) {
+  if (!Array.isArray(localRows) || localRows.length === 0) {
+    return { geojson: { type: "FeatureCollection", features: [] }, hint: "no_local_cache" };
+  }
+  const box = { west, south, east, north };
+  const { salesYear } = options;
+  const year = Number(salesYear);
+  const useYear = Number.isFinite(year) && year >= 1900 && year <= 2100;
+
+  const out = [];
+  for (const r of localRows) {
+    if (!r.bbox) continue;
+    if (!bboxIntersects(r.bbox, box)) continue;
+    const p = { ...(r.feature.properties ?? {}) };
+    if (useYear) {
+      const s = resolveHomeSalesForYear(p, year);
+      p.home_sales = s != null ? s : p.home_sales != null ? Number(p.home_sales) : null;
+    }
+    out.push({ type: "Feature", geometry: r.feature.geometry, properties: p });
+  }
+  return { geojson: { type: "FeatureCollection", features: out }, hint: null };
+}
+
+export function fetchLocalZctaExtentByZip(zip5, localRows) {
+  const z = String(zip5).replace(/\D/g, "").padStart(5, "0");
+  if (!Array.isArray(localRows) || !z) return null;
+  const row = localRows.find((r) => r.zip === z);
+  if (!row?.bbox) return null;
+  return { zip: z, ...row.bbox };
+}
+
 export function maxAllowableOffsetForZoom(zoom) {
   const z = Number(zoom);
   if (!Number.isFinite(z)) return undefined;

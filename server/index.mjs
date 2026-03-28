@@ -14,6 +14,9 @@ import {
   computeZipMetricRanges,
   fetchZctaExtentByZip,
   fetchZctaRawInBbox,
+  fetchLocalZctaExtentByZip,
+  fetchLocalZctaInBbox,
+  loadLocalZctaFeatures,
   loadZipMetricsByZip,
   mergeZctaGeojsonWithMetrics,
 } from "./zctaViewport.mjs";
@@ -61,6 +64,13 @@ try {
   zipMetricsByZip = loadZipMetricsByZip(root, readJson);
 } catch {
   zipMetricsByZip = Object.create(null);
+}
+
+let localZctaRows = null;
+try {
+  localZctaRows = loadLocalZctaFeatures(readJson);
+} catch {
+  localZctaRows = null;
 }
 
 /** Tableau-like: cache repeated viewport queries so pan/zoom feels instant. */
@@ -134,7 +144,7 @@ app.get("/api/zip-extent", async (req, res) => {
       res.json(cached);
       return;
     }
-    const ext = await fetchZctaExtentByZip(raw);
+    const ext = fetchLocalZctaExtentByZip(raw, localZctaRows) ?? (await fetchZctaExtentByZip(raw));
     if (!ext) {
       res.status(404).json({ error: "zip_not_found" });
       return;
@@ -166,6 +176,12 @@ app.get("/api/zcta-viewport", async (req, res) => {
   const mergeOpts = salesYear != null ? { salesYear } : {};
 
   try {
+    if (localZctaRows && localZctaRows.length > 0) {
+      const local = fetchLocalZctaInBbox(west, south, east, north, localZctaRows, mergeOpts);
+      res.json(local);
+      return;
+    }
+
     const key = zctaCacheKey(west, south, east, north, mapZoom);
     const memRaw = zctaViewportCache.get(key);
     if (memRaw) {

@@ -14,6 +14,7 @@
     "ingest:redfin": "node scripts/ingest-redfin-metro.mjs",
     "build:regions": "node scripts/build-demo-regions.mjs",
     "prepare:tiles-input": "node scripts/prepare-zcta-tiles-input.mjs",
+    "build:zcta-local": "node scripts/build-zcta-local-cache.mjs",
     "build:pmtiles": "node scripts/prepare-zcta-tiles-input.mjs && node scripts/build-zcta-pmtiles.mjs"
   },
   "dependencies": {
