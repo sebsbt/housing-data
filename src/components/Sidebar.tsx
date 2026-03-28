@@ -189,7 +189,7 @@ export function Sidebar({
             <span>{formatMetricValue(Math.min(rangeMin, rangeMax), metricDef?.unit ?? "count")}</span>
             <span>{formatMetricValue(Math.max(rangeMin, rangeMax), metricDef?.unit ?? "count")}</span>
           </div>
-          <div className="range-dual">
+          <div className={`range-dual ${perspective}`}>
             <input
               type="range"
               min={rangeDomain.min}

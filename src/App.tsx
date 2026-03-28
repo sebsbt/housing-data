@@ -369,6 +369,9 @@ export default function App() {
   const onSelectMetric = useCallback((id: string) => {
     setSelectedMetric(id);
     setPreset("all");
+    // Force immediate full refresh on metric switch; domain effect will set new defaults.
+    setRangeMin(null);
+    setRangeMax(null);
   }, []);
 
   return (

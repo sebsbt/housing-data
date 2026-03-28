@@ -680,6 +680,14 @@ export function MapView({
   }, [salesYear, geography, zipUsePmtiles]);
 
   useEffect(() => {
+    if (geography !== "zip" || zipUsePmtiles) return;
+    const map = mapRef.current;
+    if (!map?.isStyleLoaded()) return;
+    // Refresh viewport payload on metric switch so feature values stay in sync.
+    reloadZipViewportRef.current?.();
+  }, [metricId, geography, zipUsePmtiles]);
+
+  useEffect(() => {
     syncMarketsLayersRef.current?.();
   }, [data, metricId, metric, min, max, geography, salesYear, perspective, zipUsePmtiles]);
 
