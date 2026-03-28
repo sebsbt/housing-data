@@ -58,6 +58,27 @@ export function metricColorExpression(
   const midHigh = fav === "low" ? "#ff8a8a" : "#7fff7f";
   const highColor = fav === "low" ? "#c40000" : "#00a63e";
 
+  // Percent metrics are anchored at zero: white is always 0%.
+  if (metric.unit === "percent") {
+    const lo0 = Math.min(lo, 0);
+    const hi0 = Math.max(hi, 0);
+    return [
+      "interpolate",
+      ["linear"],
+      key,
+      lo0,
+      lowColor,
+      (lo0 + 0) / 2,
+      midLow,
+      0,
+      "#ffffff",
+      (0 + hi0) / 2,
+      midHigh,
+      hi0,
+      highColor,
+    ];
+  }
+
   return [
     "interpolate",
     ["linear"],

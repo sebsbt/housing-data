@@ -48,7 +48,8 @@ export function ChoroplethLegend({ metric, min, max, geography, perspective = "b
         </div>
       )}
       <p className="choropleth-legend-foot">
-        {perspective} view · scale: <strong>mean ± 2σ</strong> (current view, non-missing values).
+        {perspective} view · scale: <strong>mean ± 2σ</strong> (current view, non-missing values)
+        {metric.unit === "percent" ? " · white = 0%" : ""}.
       </p>
     </div>
   );
