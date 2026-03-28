@@ -12,12 +12,31 @@ function favorableDirection(metricId: string, perspective: "buyer" | "seller"): 
   return buyerFav === "high" ? "low" : "high";
 }
 
-export function legendGradientCss(metricId: string, perspective: "buyer" | "seller" = "buyer"): string {
+export function legendGradientCss(
+  metricId: string,
+  perspective: "buyer" | "seller" = "buyer",
+  paletteMode: "default" | "colorblind" = "default",
+): string {
   const fav = favorableDirection(metricId, perspective);
-  const low = fav === "low" ? "#00a63e" : "#c40000";
-  const midLow = fav === "low" ? "#7fff7f" : "#ff8a8a";
+  const palette =
+    paletteMode === "colorblind"
+      ? {
+          favorableLow: "#1d4ed8",
+          favorableMid: "#93c5fd",
+          unfavorableMid: "#fdba74",
+          unfavorableHigh: "#c2410c",
+        }
+      : {
+          favorableLow: "#00a63e",
+          favorableMid: "#7fff7f",
+          unfavorableMid: "#ff8a8a",
+          unfavorableHigh: "#c40000",
+        };
+
+  const low = fav === "low" ? palette.favorableLow : palette.unfavorableHigh;
+  const midLow = fav === "low" ? palette.favorableMid : palette.unfavorableMid;
   const mid = "#f3f4f6";
-  const midHigh = fav === "low" ? "#ff8a8a" : "#7fff7f";
-  const high = fav === "low" ? "#c40000" : "#00a63e";
+  const midHigh = fav === "low" ? palette.unfavorableMid : palette.favorableMid;
+  const high = fav === "low" ? palette.unfavorableHigh : palette.favorableLow;
   return `linear-gradient(90deg, ${low} 0%, ${midLow} 25%, ${mid} 50%, ${midHigh} 75%, ${high} 100%)`;
 }

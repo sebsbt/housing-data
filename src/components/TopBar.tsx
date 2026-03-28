@@ -8,6 +8,8 @@ type Props = {
   onGeographyChange: (g: GeographyMode) => void;
   tableOpen: boolean;
   onToggleTable: () => void;
+  colorblindMode: boolean;
+  onToggleColorblindMode: () => void;
 };
 
 const LEVELS: { id: Geo; label: string; mode?: GeographyMode }[] = [
@@ -18,7 +20,14 @@ const LEVELS: { id: Geo; label: string; mode?: GeographyMode }[] = [
   { id: "zip", label: "Zip", mode: "zip" },
 ];
 
-export function TopBar({ geography, onGeographyChange, tableOpen, onToggleTable }: Props) {
+export function TopBar({
+  geography,
+  onGeographyChange,
+  tableOpen,
+  onToggleTable,
+  colorblindMode,
+  onToggleColorblindMode,
+}: Props) {
   return (
     <header className="topbar">
       <div className="topbar-brand">
@@ -57,14 +66,11 @@ export function TopBar({ geography, onGeographyChange, tableOpen, onToggleTable 
       </nav>
 
       <div className="topbar-actions">
+        <button type="button" className="btn-outline" onClick={onToggleColorblindMode}>
+          Settings: {colorblindMode ? "Colorblind" : "Default"}
+        </button>
         <button type="button" className="btn-outline" onClick={onToggleTable}>
           {tableOpen ? "Hide table" : "Table view"}
-        </button>
-        <button type="button" className="btn-ghost" disabled title="Stub">
-          Sign up
-        </button>
-        <button type="button" className="btn-primary" disabled title="Stub">
-          Login
         </button>
       </div>
     </header>

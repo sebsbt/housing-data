@@ -11,6 +11,7 @@ import { resolveHomeSalesForYear } from "./lib/resolveHomeSalesForYear";
 
 type FilterPreset = "all" | "cheapest" | "expensive" | "high_growth" | "cooling";
 type PerspectiveMode = "buyer" | "seller";
+type PaletteMode = "default" | "colorblind";
 
 type ZipMetricRanges = Record<string, { min: number; max: number }>;
 
@@ -150,6 +151,7 @@ export default function App() {
   const [rangeMax, setRangeMax] = useState<number | null>(null);
   const [showHelperText, setShowHelperText] = useState(true);
   const [selectedRegionId, setSelectedRegionId] = useState<string | null>(null);
+  const [paletteMode, setPaletteMode] = useState<PaletteMode>("default");
 
   useEffect(() => {
     let cancelled = false;
@@ -381,6 +383,10 @@ export default function App() {
         onGeographyChange={setGeography}
         tableOpen={tableOpen}
         onToggleTable={() => setTableOpen((v) => !v)}
+        colorblindMode={paletteMode === "colorblind"}
+        onToggleColorblindMode={() =>
+          setPaletteMode((m) => (m === "colorblind" ? "default" : "colorblind"))
+        }
       />
       <SalesTimelineBar
         visible={
@@ -454,6 +460,7 @@ export default function App() {
                 salesYear={geography === "zip" ? selectedYear : undefined}
                 perspective={perspective}
                 selectedRegionId={selectedRegionId}
+                paletteMode={paletteMode}
                 zipUsePmtiles={geography === "zip" && appConfig?.zipPmtiles === true}
                 onZipViewportLoad={
                   geography === "zip" && appConfig?.zipPmtiles !== true
@@ -467,6 +474,7 @@ export default function App() {
                 max={metricDomain.max}
                 geography={geography}
                 perspective={perspective}
+                paletteMode={paletteMode}
                 subtitle={
                   geography === "zip" && selectedMetric === "home_sales"
                     ? `Year ${selectedYear}`

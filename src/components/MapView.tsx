@@ -77,6 +77,7 @@ function pmtilesUrl(): string {
 }
 
 type PerspectiveMode = "buyer" | "seller";
+type PaletteMode = "default" | "colorblind";
 
 type Props = {
   geography: GeographyMode;
@@ -89,6 +90,7 @@ type Props = {
   metricDomain: { min: number; max: number };
   salesYear?: number;
   perspective?: PerspectiveMode;
+  paletteMode?: PaletteMode;
   selectedRegionId?: string | null;
   /** When true, load `zcta.pmtiles` instead of `/api/zcta-viewport` GeoJSON. */
   zipUsePmtiles?: boolean;
@@ -104,6 +106,7 @@ export function MapView({
   metricDomain,
   salesYear,
   perspective = "buyer",
+  paletteMode = "default",
   selectedRegionId = null,
   zipUsePmtiles = false,
   onZipViewportLoad,
@@ -147,7 +150,7 @@ export function MapView({
     map.setPaintProperty(
       "regions-fill",
       "fill-color",
-      fillColorExpression(mid, m, lo, hi, geo, sy, perspective),
+      fillColorExpression(mid, m, lo, hi, geo, sy, perspective, paletteMode),
     );
 
     if (zipTiles && geo === "zip") {
@@ -303,7 +306,7 @@ export function MapView({
           source: "markets",
           "source-layer": ZCTA_SOURCE_LAYER,
           paint: {
-            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective),
+            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective, paletteMode),
             "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "selected"], false],
@@ -423,7 +426,7 @@ export function MapView({
           type: "fill",
           source: "markets",
           paint: {
-            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective),
+            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective, paletteMode),
             "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "selected"], false],
@@ -689,7 +692,7 @@ export function MapView({
 
   useEffect(() => {
     syncMarketsLayersRef.current?.();
-  }, [data, metricId, metric, min, max, geography, salesYear, perspective, zipUsePmtiles]);
+  }, [data, metricId, metric, min, max, geography, salesYear, perspective, paletteMode, zipUsePmtiles]);
 
   useEffect(() => {
     const map = mapRef.current;

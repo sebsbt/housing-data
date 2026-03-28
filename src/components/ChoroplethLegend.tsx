@@ -4,6 +4,7 @@ import type { GeographyMode, MetricDef } from "../types";
 import "./choropleth-legend.css";
 
 type PerspectiveMode = "buyer" | "seller";
+type PaletteMode = "default" | "colorblind";
 
 type Props = {
   metric: MetricDef;
@@ -11,6 +12,7 @@ type Props = {
   max: number;
   geography: GeographyMode;
   perspective?: PerspectiveMode;
+  paletteMode?: PaletteMode;
   /** e.g. "Year 2023" for home sales scrubber */
   subtitle?: string;
 };
@@ -18,10 +20,18 @@ type Props = {
 /**
  * Tableau-style color legend: titled ramp, formatted low/high, optional "no data" swatch.
  */
-export function ChoroplethLegend({ metric, min, max, geography, perspective = "buyer", subtitle }: Props) {
+export function ChoroplethLegend({
+  metric,
+  min,
+  max,
+  geography,
+  perspective = "buyer",
+  paletteMode = "default",
+  subtitle,
+}: Props) {
   const low = formatMetricValue(min, metric.unit);
   const high = formatMetricValue(max, metric.unit);
-  const gradient = legendGradientCss(metric.id, perspective);
+  const gradient = legendGradientCss(metric.id, perspective, paletteMode);
   const showZero = metric.unit === "percent";
   const zeroPos =
     showZero && max > min

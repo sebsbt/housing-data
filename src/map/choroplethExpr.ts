@@ -15,6 +15,8 @@ export function metricValueGetExpression(
   return ["to-number", ["get", metricId]];
 }
 
+type PaletteMode = "default" | "colorblind";
+
 function favorableDirection(metricId: string, perspective: "buyer" | "seller"): "high" | "low" {
   // Buyer-centric defaults:
   // - lower prices / slower market = favorable
@@ -39,6 +41,7 @@ export function metricColorExpression(
   max: number,
   salesYear: number | undefined,
   perspective: "buyer" | "seller" = "buyer",
+  paletteMode: PaletteMode = "default",
 ): ExpressionSpecification {
   const pad = (max - min) * 0.05 || 1;
   const lo = min - pad;
@@ -51,12 +54,27 @@ export function metricColorExpression(
   const q2 = lo + span * 0.5;
   const q3 = lo + span * 0.75;
 
-  // high-contrast red/green diverging palette for stronger visual separation
-  const lowColor = fav === "low" ? "#00a63e" : "#c40000"; // favorable end
-  const midLow = fav === "low" ? "#7fff7f" : "#ff8a8a";
+  // Palette sets: default red/green vs colorblind-safe blue/orange.
+  const palette =
+    paletteMode === "colorblind"
+      ? {
+          favorableLow: "#1d4ed8",
+          favorableMid: "#93c5fd",
+          unfavorableMid: "#fdba74",
+          unfavorableHigh: "#c2410c",
+        }
+      : {
+          favorableLow: "#00a63e",
+          favorableMid: "#7fff7f",
+          unfavorableMid: "#ff8a8a",
+          unfavorableHigh: "#c40000",
+        };
+
+  const lowColor = fav === "low" ? palette.favorableLow : palette.unfavorableHigh;
+  const midLow = fav === "low" ? palette.favorableMid : palette.unfavorableMid;
   const mid = "#f3f4f6";
-  const midHigh = fav === "low" ? "#ff8a8a" : "#7fff7f";
-  const highColor = fav === "low" ? "#c40000" : "#00a63e";
+  const midHigh = fav === "low" ? palette.unfavorableMid : palette.favorableMid;
+  const highColor = fav === "low" ? palette.unfavorableHigh : palette.favorableLow;
 
   // Percent metrics are anchored at zero: white is always 0%.
   if (metric.unit === "percent") {
@@ -104,8 +122,9 @@ export function fillColorExpression(
   geography: GeographyMode,
   salesYear: number | undefined,
   perspective: "buyer" | "seller" = "buyer",
+  paletteMode: PaletteMode = "default",
 ): ExpressionSpecification {
-  const metricExpr = metricColorExpression(metricId, metric, min, max, salesYear, perspective);
+  const metricExpr = metricColorExpression(metricId, metric, min, max, salesYear, perspective, paletteMode);
   if (geography === "zip") {
     return [
       "case",
