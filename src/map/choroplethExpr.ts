@@ -15,6 +15,16 @@ export function metricValueGetExpression(
   return ["to-number", ["get", metricId]];
 }
 
+function favorableDirection(metricId: string): "high" | "low" {
+  // Buyer-centric default:
+  // - lower prices / slower market = favorable
+  // - longer DOM = favorable
+  if (metricId === "days_on_market") return "high";
+  if (metricId === "home_sales" || metricId === "home_sales_yoy") return "low";
+  if (metricId === "zhvi" || metricId === "zhvi_yoy" || metricId === "zhvi_mom") return "low";
+  return "high";
+}
+
 export function metricColorExpression(
   metricId: string,
   metric: MetricDef,
@@ -28,65 +38,31 @@ export function metricColorExpression(
   const span = hi - lo || 1;
   const key = metricValueGetExpression(metricId, salesYear);
 
-  if (metric.unit === "percent") {
-    const q1 = lo + span * 0.25;
-    const mid = lo + span * 0.5;
-    const q3 = lo + span * 0.75;
-    return [
-      "interpolate",
-      ["linear"],
-      key,
-      lo,
-      "#1d4ed8",
-      q1,
-      "#60a5fa",
-      mid,
-      "#94a3b8",
-      q3,
-      "#4ade80",
-      hi,
-      "#15803d",
-    ];
-  }
-
-  if (metric.unit === "count") {
-    const q1 = lo + span * 0.25;
-    const q2 = lo + span * 0.5;
-    const q3 = lo + span * 0.75;
-    return [
-      "interpolate",
-      ["linear"],
-      key,
-      lo,
-      "#0f172a",
-      q1,
-      "#1e3a8a",
-      q2,
-      "#3b82f6",
-      q3,
-      "#5eead4",
-      hi,
-      "#ecfdf5",
-    ];
-  }
-
+  const fav = favorableDirection(metricId);
   const q1 = lo + span * 0.25;
   const q2 = lo + span * 0.5;
   const q3 = lo + span * 0.75;
+
+  const lowColor = fav === "low" ? "#16a34a" : "#dc2626"; // green if low favorable else red
+  const midLow = fav === "low" ? "#86efac" : "#fca5a5";
+  const mid = "#e5e7eb";
+  const midHigh = fav === "low" ? "#fca5a5" : "#86efac";
+  const highColor = fav === "low" ? "#dc2626" : "#16a34a";
+
   return [
     "interpolate",
     ["linear"],
     key,
     lo,
-    "#0f172a",
+    lowColor,
     q1,
-    "#1e3a8a",
+    midLow,
     q2,
-    "#2563eb",
+    mid,
     q3,
-    "#2dd4bf",
+    midHigh,
     hi,
-    "#a7f3d0",
+    highColor,
   ];
 }
 

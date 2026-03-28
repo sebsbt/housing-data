@@ -1,12 +1,17 @@
-import type { MetricDef } from "../types";
+/** Must stay in sync with map/choroplethExpr buyer-favorability coloring. */
+function favorableDirection(metricId: string): "high" | "low" {
+  if (metricId === "days_on_market") return "high";
+  if (metricId === "home_sales" || metricId === "home_sales_yoy") return "low";
+  if (metricId === "zhvi" || metricId === "zhvi_yoy" || metricId === "zhvi_mom") return "low";
+  return "high";
+}
 
-/** Must stay in sync with MapView `metricColorExpression` stops. */
-export function legendGradientCss(unit: MetricDef["unit"]): string {
-  if (unit === "percent") {
-    return "linear-gradient(90deg, #1d4ed8 0%, #60a5fa 22%, #94a3b8 50%, #4ade80 78%, #15803d 100%)";
-  }
-  if (unit === "count") {
-    return "linear-gradient(90deg, #0f172a 0%, #1e3a8a 25%, #3b82f6 50%, #5eead4 75%, #ecfdf5 100%)";
-  }
-  return "linear-gradient(90deg, #0f172a 0%, #1e3a8a 20%, #2563eb 45%, #2dd4bf 72%, #a7f3d0 100%)";
+export function legendGradientCss(metricId: string): string {
+  const fav = favorableDirection(metricId);
+  const low = fav === "low" ? "#16a34a" : "#dc2626";
+  const midLow = fav === "low" ? "#86efac" : "#fca5a5";
+  const mid = "#e5e7eb";
+  const midHigh = fav === "low" ? "#fca5a5" : "#86efac";
+  const high = fav === "low" ? "#dc2626" : "#16a34a";
+  return `linear-gradient(90deg, ${low} 0%, ${midLow} 25%, ${mid} 50%, ${midHigh} 75%, ${high} 100%)`;
 }

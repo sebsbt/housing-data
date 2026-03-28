@@ -593,6 +593,8 @@ export function MapView({
         const sales = salesDisplay != null ? salesDisplay : p.home_sales != null ? Number(p.home_sales) : null;
         const note = String(p.data_note ?? "");
         const noData = !hasMetric || (zhvi == null && yoy == null && sales == null);
+        const hasValueData = zhvi != null || yoy != null || mom != null;
+        const hasMarketData = sales != null || syoy != null || dom != null;
         const dom = p.days_on_market != null ? Number(p.days_on_market) : null;
         const syoy = p.home_sales_yoy != null ? Number(p.home_sales_yoy) : null;
         const html = `
@@ -616,6 +618,7 @@ export function MapView({
               </tbody>
             </table>
             <p class="popup-note">${noData ? "No metrics for this area — add it to your seed or ingest." : ""}${note.includes("DEMO") || note.includes("demo") ? " Demo seed where available." : ""}</p>
+            <p class="popup-note">Value data: ${hasValueData ? "available" : "missing"} · Market activity data: ${hasMarketData ? "available" : "missing"}</p>
           </div>
         `;
         new maplibregl.Popup({ maxWidth: "320px" })

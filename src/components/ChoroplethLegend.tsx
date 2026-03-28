@@ -18,7 +18,7 @@ type Props = {
 export function ChoroplethLegend({ metric, min, max, geography, subtitle }: Props) {
   const low = formatMetricValue(min, metric.unit);
   const high = formatMetricValue(max, metric.unit);
-  const gradient = legendGradientCss(metric.unit);
+  const gradient = legendGradientCss(metric.id);
 
   const legendTitle =
     metric.familyLabel && metric.metricFamily
