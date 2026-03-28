@@ -2,6 +2,7 @@ import compression from "compression";
 import express from "express";
 import fs from "fs";
 import path from "path";
+import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import {
   readZctaExtentDisk,
@@ -95,6 +96,58 @@ function mergeZctaViewportPayload(raw, mergeOpts) {
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
+});
+
+// Local-pull backup endpoint (token-protected): streams a tar.gz of selected workspace paths.
+// Configure: LOCAL_PULL_TOKEN=<strong-random-token>
+app.get("/api/local-pull", (req, res) => {
+  const token = process.env.LOCAL_PULL_TOKEN;
+  if (!token) return res.status(503).json({ error: "local_pull_not_configured" });
+
+  const provided = String(req.query.token || "");
+  if (!provided || provided !== token) {
+    return res.status(401).json({ error: "unauthorized" });
+  }
+
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+  res.setHeader("Content-Type", "application/gzip");
+  res.setHeader("Content-Disposition", `attachment; filename="workspace-backup-${stamp}.tar.gz"`);
+  res.setHeader("Cache-Control", "no-store");
+
+  const includes = [
+    "memory",
+    "MEMORY.md",
+    "housing-data",
+    "scripts/daily-macro.sh",
+  ];
+
+  const tarArgs = [
+    "-czf",
+    "-",
+    "--exclude=.git",
+    "--exclude=node_modules",
+    "--exclude=.venv",
+    "--exclude=.secrets",
+    ...includes,
+  ];
+
+  const tar = spawn("tar", tarArgs, { cwd: root });
+  tar.stdout.pipe(res);
+
+  tar.stderr.on("data", () => {
+    // suppress noisy stderr from tar unless process fails
+  });
+
+  tar.on("error", () => {
+    if (!res.headersSent) res.status(500).json({ error: "backup_spawn_failed" });
+    else res.end();
+  });
+
+  tar.on("close", (code) => {
+    if (code !== 0 && !res.headersSent) {
+      res.status(500).json({ error: "backup_failed", code });
+    }
+  });
 });
 
 app.get("/api/metrics", (_req, res) => {
