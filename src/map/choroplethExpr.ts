@@ -15,14 +15,21 @@ export function metricValueGetExpression(
   return ["to-number", ["get", metricId]];
 }
 
-function favorableDirection(metricId: string): "high" | "low" {
-  // Buyer-centric default:
+function favorableDirection(metricId: string, perspective: "buyer" | "seller"): "high" | "low" {
+  // Buyer-centric defaults:
   // - lower prices / slower market = favorable
   // - longer DOM = favorable
-  if (metricId === "days_on_market") return "high";
-  if (metricId === "home_sales" || metricId === "home_sales_yoy") return "low";
-  if (metricId === "zhvi" || metricId === "zhvi_yoy" || metricId === "zhvi_mom") return "low";
-  return "high";
+  const buyerFav: "high" | "low" =
+    metricId === "days_on_market"
+      ? "high"
+      : metricId === "home_sales" || metricId === "home_sales_yoy"
+        ? "low"
+        : metricId === "zhvi" || metricId === "zhvi_yoy" || metricId === "zhvi_mom"
+          ? "low"
+          : "high";
+
+  if (perspective === "buyer") return buyerFav;
+  return buyerFav === "high" ? "low" : "high";
 }
 
 export function metricColorExpression(
@@ -31,6 +38,7 @@ export function metricColorExpression(
   min: number,
   max: number,
   salesYear: number | undefined,
+  perspective: "buyer" | "seller" = "buyer",
 ): ExpressionSpecification {
   const pad = (max - min) * 0.05 || 1;
   const lo = min - pad;
@@ -38,7 +46,7 @@ export function metricColorExpression(
   const span = hi - lo || 1;
   const key = metricValueGetExpression(metricId, salesYear);
 
-  const fav = favorableDirection(metricId);
+  const fav = favorableDirection(metricId, perspective);
   const q1 = lo + span * 0.25;
   const q2 = lo + span * 0.5;
   const q3 = lo + span * 0.75;
@@ -73,8 +81,9 @@ export function fillColorExpression(
   max: number,
   geography: GeographyMode,
   salesYear: number | undefined,
+  perspective: "buyer" | "seller" = "buyer",
 ): ExpressionSpecification {
-  const metricExpr = metricColorExpression(metricId, metric, min, max, salesYear);
+  const metricExpr = metricColorExpression(metricId, metric, min, max, salesYear, perspective);
   if (geography === "zip") {
     return [
       "case",

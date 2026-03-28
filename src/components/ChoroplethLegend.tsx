@@ -3,11 +3,14 @@ import { formatMetricValue } from "../lib/formatMetricValue";
 import type { GeographyMode, MetricDef } from "../types";
 import "./choropleth-legend.css";
 
+type PerspectiveMode = "buyer" | "seller";
+
 type Props = {
   metric: MetricDef;
   min: number;
   max: number;
   geography: GeographyMode;
+  perspective?: PerspectiveMode;
   /** e.g. "Year 2023" for home sales scrubber */
   subtitle?: string;
 };
@@ -15,10 +18,10 @@ type Props = {
 /**
  * Tableau-style color legend: titled ramp, formatted low/high, optional "no data" swatch.
  */
-export function ChoroplethLegend({ metric, min, max, geography, subtitle }: Props) {
+export function ChoroplethLegend({ metric, min, max, geography, perspective = "buyer", subtitle }: Props) {
   const low = formatMetricValue(min, metric.unit);
   const high = formatMetricValue(max, metric.unit);
-  const gradient = legendGradientCss(metric.id);
+  const gradient = legendGradientCss(metric.id, perspective);
 
   const legendTitle =
     metric.familyLabel && metric.metricFamily
@@ -45,7 +48,7 @@ export function ChoroplethLegend({ metric, min, max, geography, subtitle }: Prop
         </div>
       )}
       <p className="choropleth-legend-foot">
-        Choropleth “heat” by selected field. Hover shows that value in the browser tooltip;
+        Choropleth “heat” by selected field ({perspective} perspective). Hover shows that value in the browser tooltip;
         click opens detail.
       </p>
     </div>

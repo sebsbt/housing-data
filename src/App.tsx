@@ -9,6 +9,7 @@ import "./app-layout.css";
 import { fetchWithRetry } from "./lib/fetchWithRetry";
 
 type FilterPreset = "all" | "cheapest" | "expensive" | "high_growth" | "cooling";
+type PerspectiveMode = "buyer" | "seller";
 
 type ZipMetricRanges = Record<string, { min: number; max: number }>;
 
@@ -106,6 +107,7 @@ export default function App() {
   const [preset, setPreset] = useState<FilterPreset>("all");
   const [tableOpen, setTableOpen] = useState(false);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [perspective, setPerspective] = useState<PerspectiveMode>("buyer");
   const [salesYearsInfo, setSalesYearsInfo] = useState<SalesYearsResponse | null>(null);
   const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
   const [salesPlaying, setSalesPlaying] = useState(false);
@@ -340,6 +342,8 @@ export default function App() {
           onSelectMetric={onSelectMetric}
           preset={preset}
           onPreset={setPreset}
+          perspective={perspective}
+          onPerspective={setPerspective}
           metricDef={selectedMetricDef}
         />
         <main className="map-main">
@@ -379,6 +383,7 @@ export default function App() {
                 metric={selectedMetricDef}
                 metricDomain={metricDomain}
                 salesYear={geography === "zip" ? selectedYear : undefined}
+                perspective={perspective}
                 zipUsePmtiles={geography === "zip" && appConfig?.zipPmtiles === true}
                 onZipViewportLoad={
                   geography === "zip" && appConfig?.zipPmtiles !== true
@@ -391,6 +396,7 @@ export default function App() {
                 min={metricDomain.min}
                 max={metricDomain.max}
                 geography={geography}
+                perspective={perspective}
                 subtitle={
                   geography === "zip" && selectedMetric === "home_sales"
                     ? `Year ${selectedYear}`

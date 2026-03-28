@@ -9,6 +9,8 @@ function familyMembersInGroup(metrics: MetricDef[], group: string, familyId: str
     .sort((a, b) => (a.familyOrder ?? 0) - (b.familyOrder ?? 0));
 }
 
+type PerspectiveMode = "buyer" | "seller";
+
 type Props = {
   geography: GeographyMode;
   metrics: MetricDef[];
@@ -16,6 +18,8 @@ type Props = {
   onSelectMetric: (id: string) => void;
   preset: Preset;
   onPreset: (p: Preset) => void;
+  perspective: PerspectiveMode;
+  onPerspective: (p: PerspectiveMode) => void;
   metricDef: MetricDef | undefined;
 };
 
@@ -26,6 +30,8 @@ export function Sidebar({
   onSelectMetric,
   preset,
   onPreset,
+  perspective,
+  onPerspective,
   metricDef,
 }: Props) {
   const groups = [...new Set(metrics.map((m) => m.group))];
@@ -34,6 +40,22 @@ export function Sidebar({
     <aside className="sidebar">
       <section className="sidebar-section">
         <h2 className="sidebar-heading">Popular data</h2>
+        <div className="filter-grid" style={{ marginBottom: 10 }}>
+          <button
+            type="button"
+            className={perspective === "buyer" ? "filter-btn on" : "filter-btn"}
+            onClick={() => onPerspective("buyer")}
+          >
+            Buyer view
+          </button>
+          <button
+            type="button"
+            className={perspective === "seller" ? "filter-btn on" : "filter-btn"}
+            onClick={() => onPerspective("seller")}
+          >
+            Seller view
+          </button>
+        </div>
         <p className="sidebar-hint">
           Pick a metric to color regions. In <strong>Zip</strong> mode, every ZCTA on
           screen is loaded from Census when you pan/zoom; only ZIPs in your seed/ingest

@@ -76,6 +76,8 @@ function pmtilesUrl(): string {
   return `pmtiles://${o}/tiles/zcta.pmtiles`;
 }
 
+type PerspectiveMode = "buyer" | "seller";
+
 type Props = {
   geography: GeographyMode;
   /** Filtered features (presets); drives GeoJSON data or vector layer filter. */
@@ -86,6 +88,7 @@ type Props = {
   metric: MetricDef;
   metricDomain: { min: number; max: number };
   salesYear?: number;
+  perspective?: PerspectiveMode;
   /** When true, load `zcta.pmtiles` instead of `/api/zcta-viewport` GeoJSON. */
   zipUsePmtiles?: boolean;
   onZipViewportLoad?: (fc: FeatureCollection, hint: string | null) => void;
@@ -99,6 +102,7 @@ export function MapView({
   metric,
   metricDomain,
   salesYear,
+  perspective = "buyer",
   zipUsePmtiles = false,
   onZipViewportLoad,
 }: Props) {
@@ -140,7 +144,7 @@ export function MapView({
     map.setPaintProperty(
       "regions-fill",
       "fill-color",
-      fillColorExpression(mid, m, lo, hi, geo, sy),
+      fillColorExpression(mid, m, lo, hi, geo, sy, perspective),
     );
 
     if (zipTiles && geo === "zip") {
@@ -296,7 +300,7 @@ export function MapView({
           source: "markets",
           "source-layer": ZCTA_SOURCE_LAYER,
           paint: {
-            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy),
+            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective),
             "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
@@ -410,7 +414,7 @@ export function MapView({
           type: "fill",
           source: "markets",
           paint: {
-            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy),
+            "fill-color": fillColorExpression(mid, m, lo, hi, geography, sy, perspective),
             "fill-opacity": [
               "case",
               ["boolean", ["feature-state", "hover"], false],
@@ -592,11 +596,11 @@ export function MapView({
         const salesDisplay = getNumericForSelectedMetric(p, "home_sales", geography, sy);
         const sales = salesDisplay != null ? salesDisplay : p.home_sales != null ? Number(p.home_sales) : null;
         const note = String(p.data_note ?? "");
+        const dom = p.days_on_market != null ? Number(p.days_on_market) : null;
+        const syoy = p.home_sales_yoy != null ? Number(p.home_sales_yoy) : null;
         const noData = !hasMetric || (zhvi == null && yoy == null && sales == null);
         const hasValueData = zhvi != null || yoy != null || mom != null;
         const hasMarketData = sales != null || syoy != null || dom != null;
-        const dom = p.days_on_market != null ? Number(p.days_on_market) : null;
-        const syoy = p.home_sales_yoy != null ? Number(p.home_sales_yoy) : null;
         const html = `
           <div class="popup-inner">
             <div class="popup-title">${escapeHtml(title)}</div>
@@ -648,7 +652,7 @@ export function MapView({
 
   useEffect(() => {
     syncMarketsLayersRef.current?.();
-  }, [data, metricId, metric, min, max, geography, salesYear, zipUsePmtiles]);
+  }, [data, metricId, metric, min, max, geography, salesYear, perspective, zipUsePmtiles]);
 
   return <div ref={containerRef} className="map-canvas" />;
 }
